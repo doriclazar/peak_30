@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>EXTENSION: profile</h1>
+<img src="{{ profile.picture }}" />
+<p>Name:{{ bot.name }}</p>
+<p>Code:{{ bot.code }}</p>
+<p>Rating: {{ profile.rating }}</p>
+<p>Creator:<a href="{% url 'get_user_profile' username=bot.creator.username %}"><li>{{ bot.creator.get_full_name }}</li></a></p>
+
+<p>Professions:</p> 
+{% for profession in professions %}
+<a href="{% url 'get_profession_profile' profession_code=profession.code %}"><li>{{ profession.name }}</li></a>
+{% endfor %}
+
+<h2>{{ error }}</h2>
+{% endblock %}

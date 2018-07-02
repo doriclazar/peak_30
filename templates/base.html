@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		{% load static %}
+		<script type="text/javascript" src="{% static "/js/jquery.js" %}"></script>
+		{% load bootstrap3 %}
+		{% bootstrap_css %}
+		{% bootstrap_javascript %}
+		<title>Peak-30</title>
+	</head>
+	<body>
+		{% include "base/navbar.html" %}
+		{% include "base/header.html" %}
+
+		<div id='links'>
+		TESTING LINKS:
+		</div>
+
+		<div id='content'>
+		{% block content %}{% endblock %}
+		</div>
+	</body>
+</html>
