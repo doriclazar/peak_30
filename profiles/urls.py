@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.index),
+    url(r'^$', views.index, name='get_profiles'),
 
     url(r'^users/$', views.get_users, name='get_users'),
     url(r'^groups/$', views.get_groups, name='get_groups'),

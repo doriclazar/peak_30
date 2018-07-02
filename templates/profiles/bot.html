@@ -6,12 +6,14 @@
 <p>Name:{{ bot.name }}</p>
 <p>Code:{{ bot.code }}</p>
 <p>Rating: {{ profile.rating }}</p>
-<p>Creator:<a href="{% url 'get_user_profile' username=bot.creator.username %}"><li>{{ bot.creator.get_full_name }}</li></a></p>
-
+<p>Creator:</p>
+<a class="btn btn-link" href="{% url 'get_user_profile' username=bot.creator.username %}">{{ bot.creator.get_full_name }}</a>
 <p>Professions:</p> 
+<ul class='list-unstyled'>
 {% for profession in professions %}
-<a href="{% url 'get_profession_profile' profession_code=profession.code %}"><li>{{ profession.name }}</li></a>
+<li><a class="btn btn-link" href="{% url 'get_profession_profile' profession_code=profession.code %}">{{ profession.name }}</a></li>
 {% endfor %}
+</ul>
 
 <h2>{{ error }}</h2>
 {% endblock %}

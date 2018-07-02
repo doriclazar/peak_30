@@ -4,9 +4,11 @@
 <h1>EXTENSION: professions</h1>
 
 <p>Professions:</p>
+<ul class='list-unstyled'>
 {% for profession in professions %}
-<a href="{% url 'get_profession_profile' profession_code=profession.code %}"><li>{{ profession.name }}</li></a>
+<li><a href="{% url 'get_profession_profile' profession_code=profession.code %}">{{ profession.name }}</a></li>
 {% endfor %}
+</ul>
 
 <h2>{{ error }}</h2>
 {% endblock %}

@@ -11,20 +11,25 @@
 <P>Rating: {{ profile.rating }}
 
 <p>Bots List:</p>
+<ul class='list-unstyled'>
 {% for bot in bots %}
-<a href="{% url 'get_bot_profile' bot_code=bot.code %}"><li>{{ bot.name }}</li></a>
+<li><a href="{% url 'get_bot_profile' bot_code=bot.code %}">{{ bot.name }}</a></li>
 {% endfor %}
+</ul>
 
 <p>Professions:</p>
+<ul class='list-unstyled'>
 {% for profession in professions %}
-<a href="{% url 'get_profession_profile' profession_code=profession.code %}"><li>{{ profession.name }}</li></a>
+<li><a href="{% url 'get_profession_profile' profession_code=profession.code %}">{{ profession.name }}</a></li>
 {% endfor %}
-
+</ul>
 
 <p>Groups:</p>
+<ul class='list-unstyled'>
 {% for group in groups %}
-<a href="{% url 'get_group_profile' group_name=group.name %}"><li>{{ group.name }}</li></a>
+<li><a href="{% url 'get_group_profile' group_name=group.name %}">{{ group.name }}</a></li>
 {% endfor %}
+</ul>
 
 <h2>{{ error }}</h2>
 {% endblock %}

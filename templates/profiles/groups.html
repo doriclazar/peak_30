@@ -5,9 +5,11 @@
 
 
 <p>Groups List:</p>
+<ul class='list-unstyled'>
 {% for group in groups %}
-<a href="{% url 'get_group_profile' group_name=group.name %}"><li>{{ group.name }}</li></a>
+<li><a href="{% url 'get_group_profile' group_name=group.name %}">{{ group.name }}</a></li>
 {% endfor %}
+</ul>
 
 <h2>{{ error }}</h2>
 {% endblock %}

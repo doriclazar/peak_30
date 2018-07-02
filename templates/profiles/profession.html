@@ -7,12 +7,14 @@
 <p>About: {{ profile.about }} </p>
 <p>Rating: {{ profile.rating }} </p>
 <p>Creator: {{ profession.creator }}</p>
-<p>Creator:<a href="{% url 'get_user_profile' username=profession.creator.username %}"><li>{{ profession.creator.get_full_name }}</li></a></p>
+<p>Creator:<a href="{% url 'get_user_profile' username=profession.creator.username %}">{{ profession.creator.get_full_name }}</a></p>
 
 <p>Bots List:</p>
+<ul class='list-unstyled'>
 {% for bot in bots %}
-<a href="{% url 'get_bot_profile' bot_code=bot.code %}"><li>{{ bot.name }}</li></a>
+<li><a href="{% url 'get_bot_profile' bot_code=bot.code %}">{{ bot.name }}</a></li>
 {% endfor %}
+</ul>
 
 <h2>{{ error }}</h2>
 {% endblock %}
