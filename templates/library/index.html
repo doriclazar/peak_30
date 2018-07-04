@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>EXTENSION: library</h1>
+<img src="{{ profile.picture }}" />
+<a href='{% url 'get_professions' %}'>Professions</a>
+<a href='{% url 'get_modules' %}'>Modules</a>
+<a href='{% url 'get_categories' %}'>Categories</a>
+<a href='{% url 'get_commands' %}'>Commands</a>
+
+<h2>{{ error }}</h2>
+{% endblock %}

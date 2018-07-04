@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>EXTENSION: library</h1>
+
+<p>Commands:</p>
+<ul class='list-unstyled'>
+{% for command in commands %}
+<li><a href="{% url 'get_command' command_code=command.code %}">{{ command.name }}</a></li>
+{% endfor %}
+</ul>
+
+<h2>{{ error }}</h2>
+{% endblock %}

@@ -11,7 +11,7 @@
 <p>Professions:</p> 
 <ul class='list-unstyled'>
 {% for profession in professions %}
-<li><a class="btn btn-link" href="{% url 'get_profession_profile' profession_code=profession.code %}">{{ profession.name }}</a></li>
+<li><a class="btn btn-link" href="{% url 'get_profession' profession_code=profession.code %}">{{ profession.name }}</a></li>
 {% endfor %}
 </ul>
 

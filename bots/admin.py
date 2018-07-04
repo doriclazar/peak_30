@@ -1,4 +1,4 @@
 from django.contrib import admin
-from .models import Profession, Bot, Rule, Permit
+from .models import Bot, Rule, Permit
 
-admin.site.register((Profession, Bot, Rule, Permit))
+admin.site.register((Bot, Rule, Permit))

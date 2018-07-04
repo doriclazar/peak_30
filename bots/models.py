@@ -1,35 +1,21 @@
-import re
 from django.db import models
 from django.contrib.auth.models import User, Group
-
-class Profession(models.Model):
-    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    name = models.CharField(max_length = 128)
-    code = models.CharField(max_length = 128, default='')
-    active = models.BooleanField(default = True)
-    def __str__(self):
-        return 'Profession: {0}.  Creator: {1}.'.format(self.name, self.creator.get_full_name())
-
-    def clean(self):
-        forbiden_chars = (' ', '!', '$', '^', '*')
-        for forbiden_char in forbiden_chars:
-            if forbiden_char in self.code:
-                raise ValidationError('Profession code must not contain {0} character.'.format(forbiden_char,))
+from library.models import Profession
 
 class Bot(models.Model):
     creator = models.ForeignKey(User, on_delete = models.DO_NOTHING)
     profession = models.ManyToManyField(Profession)
-    name = models.CharField(max_length = 128)
-    code = models.CharField(max_length = 128, default='')
-    public_key = models.CharField(max_length = 4096)
+    name = models.CharField(max_length = 32)
+    code = models.CharField(max_length = 16, default='')
+    public_key = models.CharField(max_length = 1024)
     public_key_expiry = models.DateField()
     active = models.BooleanField(default = True)
     def __str__(self):
         return 'Bot: {0}.  Creator: {1}.'.format(self.name, self.creator.get_full_name())
 
 class Rule(models.Model):
-    name = models.CharField(max_length = 64)
-    code = models.CharField(max_length = 8)
+    name = models.CharField(max_length = 32)
+    code = models.CharField(max_length = 16)
     active = models.BooleanField(default = True)
     def __str__(self):
         return 'Rule: {0}.  Code: {1}.'.format(self.name, self.code)

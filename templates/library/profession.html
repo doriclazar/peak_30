@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>EXTENSION: library</h1>
+<img src="{{ profession.picture }}" />
+<p>Name: {{ profession.name  }}</p>
+<p>Description: {{ profession.description }} </p>
+<p>Creation Date: {{ profession.creation_date }}</p>
+<p>Creator:<a href="{% url 'get_user_profile' username=profession.creator.username %}">{{ profession.creator.get_full_name }}</a></p>
+
+<p>Bots List:</p>
+<ul class='list-unstyled'>
+{% for bot in bots %}
+<li><a href="{% url 'get_bot_profile' bot_code=bot.code %}">{{ bot.name }}</a></li>
+{% endfor %}
+</ul>
+
+<p>Modules List:</p>
+<ul class='list-unstyled'>
+{% for module in modules %}
+<li><a href="{% url 'get_module' module_code=module.code %}">{{ module.name }}</a></li>
+{% endfor %}
+</ul>
+
+<h2>{{ error }}</h2>
+{% endblock %}

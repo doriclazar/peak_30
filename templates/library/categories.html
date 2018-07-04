@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>EXTENSION: library</h1>
+
+<p>Categories:</p>
+<ul class='list-unstyled'>
+{% for category in categories %}
+<li><a href="{% url 'get_category' category_code=category.code %}">{{ category.name }}</a></li>
+{% endfor %}
+</ul>
+
+<h2>{{ error }}</h2>
+{% endblock %}

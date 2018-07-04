@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import User, Group
 from datetime import date
 from bots.models import Profession, Bot
-from .models import UserProfile, GroupProfile, ProfessionProfile, BotProfile
+from .models import UserProfile, GroupProfile, BotProfile
 
 def index(request, **kwargs):
     return render(request, 'profiles/index.html', kwargs)
@@ -15,9 +15,6 @@ def get_groups(request, **kwargs):
     kwargs['groups'] = Group.objects.all()
     return render(request, 'profiles/groups.html', kwargs)
 
-def get_professions(request, **kwargs):
-    kwargs['professions'] = Profession.objects.all()
-    return render(request, 'profiles/professions.html', kwargs)
 
 def get_bots(request, **kwargs):
     kwargs['bots'] = Bot.objects.all()
@@ -50,22 +47,6 @@ def get_group_profile(request, **kwargs):
     except Group.DoesNotExist:
         kwargs['error'] = 'There are no groups with name: {0}'.format(kwargs['group_name'],)
     return render(request, 'profiles/group.html', kwargs)
-
-def get_profession_profile(request, **kwargs):
-    try:
-        kwargs['profession'] = Profession.objects.get(code = kwargs['profession_code'])
-        try:
-            kwargs['profile'] = ProfessionProfile.objects.get(profession = kwargs['profession'])
-        except ProfessionProfile.DoesNotExist:
-            kwargs['error'] =  'Profession {0} does not have a profile.'.format(kwargs['profession_code'],)
-        try:
-            kwargs['bots'] = Bot.objects.filter(profession = kwargs['profession'])
-        except Bot.DoesNotExist:
-            kwargs['error'] = 'There are bots no with profession code: {0}'.format(kwargs['profession_code'],)
-
-    except Profession.DoesNotExist:
-        kwargs['error'] = 'There are no professions with code: {0}'.format(kwargs['profession_code'],)
-    return render(request, 'profiles/profession.html', kwargs)
 
 def get_bot_profile(request, **kwargs):
     try:

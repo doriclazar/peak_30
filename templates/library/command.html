@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>EXTENSION: library</h1>
+<img src="{{ command.picture }}" />
+<p>Name: {{ command.name  }}</p>
+<p>Module: {{ command.module.name }}</p>
+<p>Description: {{ command.description }} </p>
+<p>Creation Date: {{ command.creation_date }}</p>
+<p>Programming Language: {{ command.programming_language }}</p>
+<p>Script url: {{ command.script_url }}</p>
+<p>Definition: {{ command.definition }}</p>
+<p>Creator:<a href="{% url 'get_user_profile' username=command.creator.username %}">{{ command.creator.get_full_name }}</a></p>
+
+<p>Categories List:</p>
+<ul class='list-unstyled'>
+{% for category in cotegories %}
+<li><a href="{% url 'get_category' category_code=category.code %}">{{ category.name }}</a></li>
+{% endfor %}
+</ul>
+
+<h2>{{ error }}</h2>
+{% endblock %}

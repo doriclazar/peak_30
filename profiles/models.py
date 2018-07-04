@@ -1,12 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
-from bots.models import Profession, Bot
+from bots.models import Bot
+from library.models import Profession
 import datetime
 
 class GroupProfile(models.Model):
     group = models.OneToOneField(Group, on_delete = models.DO_NOTHING)
     picture = models.URLField(default = '')
-    about = models.CharField(max_length = 4096, default = None)
+    about = models.CharField(max_length = 1024, default = None)
     rating = models.FloatField(default = 0)
     #Keep private
     peak_points = models.FloatField(default = 0)
@@ -18,7 +19,7 @@ class GroupProfile(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete = models.DO_NOTHING)
     picture = models.URLField(default = '')
-    about = models.CharField(max_length = 4096, default = None)
+    about = models.CharField(max_length = 1024, default = None)
     rating = models.FloatField(default = 0)
     birth_date = models.DateField(default = None)
     #Keep private
@@ -31,20 +32,10 @@ class UserProfile(models.Model):
     def __str__(self):
        return '{0} {1} {2}'.format(self.user.email, self.user.first_name, self.user.last_name)
 
-
-class ProfessionProfile(models.Model):
-    profession = models.OneToOneField(Profession, on_delete = models.DO_NOTHING)
-    picture = models.URLField(default = '')
-    about = models.CharField(max_length = 4096, default = None)
-    rating = models.FloatField(default = 0)
-    creation_date = models.DateField()
-    def __str__(self):
-       return '{0}'.format(self.profession.name)
-
 class BotProfile(models.Model):
     bot = models.OneToOneField(Bot, on_delete = models.DO_NOTHING)
     picture = models.URLField(default = '')
-    about = models.CharField(max_length = 4096, default = None)
+    about = models.CharField(max_length = 1024, default = None)
     rating = models.FloatField(default = 0)
     creation_date = models.DateField()
     def __str__(self):
