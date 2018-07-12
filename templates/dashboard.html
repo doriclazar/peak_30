@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>EXTENSION: Dashboard</h1>
+
+<div class="container">
+<div class="row">
+<div class="col-md-4">
+<table class="table">
+<thead>
+<tr>
+<th scope="col"></th>
+<th scope="col">Group</th>
+<th scope="col">Rating</th>
+<th scope="col">Created</th>
+</tr>
+</thead>
+<tbody>
+{% for group_profile in group_profiles %}
+<tr>
+<td><img src={{ group_profile.picture }}</td>
+<td><a href="{% url 'get_group_profile' group_name=group_profile.group.name %}">{{ group_profile.group.name }}</a></td>
+<td>{{ group_profile.rating }}</td>
+<td>{{ group_profile.creation_date }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+<table class="table">
+<thead>
+<tr>
+<th scope="col"></th>
+<th scope="col">User</th>
+<th scope="col">Rating</th>
+<th scope="col">Created</th>
+</tr>
+</thead>
+<tbody>
+{% for user_profile in user_profiles %}
+<tr>
+<td><img src={{ user_profile.picture }}</td>
+<td><a href="{% url 'get_user_profile' username=user_profile.user.username %}">{{ user_profile.user.get_full_name }}</a></td>
+<td>{{ user_profile.rating }}</td>
+<td>{{ user_profile.creation_date }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+<table class="table">
+<thead>
+<tr>
+<th scope="col"></th>
+<th scope="col">Bot</th>
+<th scope="col">Rating</th>
+<th scope="col">Created</th>
+</tr>
+</thead>
+<tbody>
+{% for bot in bots %}
+<tr>
+<td><img src={{ bot.picture }}</td>
+<td><a href="{% url 'get_bot_profile' bot_code=bot.code %}">{{ bot.name }}</a></td>
+<td>{{ bot.rating }}</td>
+<td>{{ bot.creation_date }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+
+<div class="col-md-4">
+<table class="table">
+<thead>
+<tr>
+<th scope="col"></th>
+<th scope="col">Profession</th>
+<th scope="col">Created</th>
+</tr>
+</thead>
+<tbody>
+{% for profession in professions %}
+<tr>
+<td><img src={{ profession.picture }}</td>
+<td><a href="{% url 'get_profession' profession_code=profession.code %}">{{ profession.name }}</a></td>
+<td>{{ profession.creation_date }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+<table class="table">
+<thead>
+<tr>
+<th scope="col"></th>
+<th scope="col">Module</th>
+<th scope="col">Created</th>
+</tr>
+</thead>
+<tbody>
+{% for module in modules %}
+<tr>
+<td><img src={{ module.picture }}</td>
+<td><a href="{% url 'get_module' module_code=module.code %}">{{ module.name }}</a></td>
+<td>{{ module.creation_date }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+
+<table class="table">
+<thead>
+<tr>
+<th scope="col"></th>
+<th scope="col">Command</th>
+<th scope="col">Created</th>
+</tr>
+</thead>
+<tbody>
+{% for command in commands %}
+<tr>
+<td><img src={{ command.picture }}</td>
+<td><a href="{% url 'get_command' command_code=command.code %}">{{ command.name }}</a></td>
+<td>{{ command.creation_date }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+</div>
+<div class="col-md-4">
+</div>
+</div>
+</div>
+
+<h2>{{ error }}</h2>
+{% endblock %}
