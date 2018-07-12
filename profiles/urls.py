@@ -12,7 +12,7 @@ urlpatterns = [
     #url(r'^professions/$', views.get_professions, name='get_professions'),
     url(r'^bots/$', views.get_bots, name='get_bots'),
 
-    url(r'^users/(?P<username>.+)/$', views.get_user_profile, name='get_user_profile'),
     url(r'^groups/(?P<group_name>.+)/$', views.get_group_profile, name='get_group_profile'),
+    url(r'^users/(?P<username>.+)/$', views.get_user_profile, name='get_user_profile'),
     url(r'^bots/(?P<bot_code>.+)/$', views.get_bot_profile, name='get_bot_profile'),
 ]

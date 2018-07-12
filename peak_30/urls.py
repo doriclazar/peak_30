@@ -17,9 +17,10 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^', include('profiles.urls')),
-    url(r'^accounts/', include('registration.backends.hmac.urls')),
-    url(r'^admin/', admin.site.urls),
+    url(r'^', include('dashboard.urls')),
     url(r'^profiles/', include('profiles.urls')),
     url(r'^library/', include('library.urls')),
+    url(r'^messages/', include('messages.urls')),
+    url(r'^accounts/', include('registration.backends.hmac.urls')),
+    url(r'^admin/', admin.site.urls),
 ]

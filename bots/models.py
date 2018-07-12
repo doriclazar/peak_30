@@ -7,8 +7,11 @@ class Bot(models.Model):
     profession = models.ManyToManyField(Profession)
     name = models.CharField(max_length = 32)
     code = models.CharField(max_length = 16, default='')
+    rating = models.FloatField(default = 0)
     public_key = models.CharField(max_length = 1024)
     public_key_expiry = models.DateField()
+    creation_date = models.DateField()
+    accept_appointment = models.BooleanField(default = True)
     active = models.BooleanField(default = True)
     def __str__(self):
         return 'Bot: {0}.  Creator: {1}.'.format(self.name, self.creator.get_full_name())

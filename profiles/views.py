@@ -11,6 +11,7 @@ def get_users(request, **kwargs):
     kwargs['users'] = User.objects.all()
     return render(request, 'profiles/users.html', kwargs)
 
+
 def get_groups(request, **kwargs):
     kwargs['groups'] = Group.objects.all()
     return render(request, 'profiles/groups.html', kwargs)
@@ -19,6 +20,18 @@ def get_groups(request, **kwargs):
 def get_bots(request, **kwargs):
     kwargs['bots'] = Bot.objects.all()
     return render(request, 'profiles/bots.html', kwargs)
+
+def get_group_profile(request, **kwargs):
+    try:
+        kwargs['group'] = Group.objects.get(name = kwargs['group_name'])
+        try:
+            kwargs['profile'] = GroupProfile.objects.get(group = kwargs['group'])
+            kwargs['users'] = User.objects.filter(groups = kwargs['group'])
+        except GroupProfile.DoesNotExist:
+            kwargs['error'] =  'Group {0} does not have a profile.'.format(kwargs['group_name'],)
+    except Group.DoesNotExist:
+        kwargs['error'] = 'There are no groups with name: {0}'.format(kwargs['group_name'],)
+    return render(request, 'profiles/group.html', kwargs)
 
 def get_user_profile(request, **kwargs):
     try:
@@ -36,17 +49,6 @@ def get_user_profile(request, **kwargs):
         kwargs['error'] = 'There are no users with username: {0}'.format(kwargs['username'],)
     return render(request, 'profiles/user.html', kwargs)
 
-def get_group_profile(request, **kwargs):
-    try:
-        kwargs['group'] = Group.objects.get(name = kwargs['group_name'])
-        try:
-            kwargs['profile'] = GroupProfile.objects.get(group = kwargs['group'])
-            kwargs['users'] = User.objects.filter(groups = kwargs['group'])
-        except GroupProfile.DoesNotExist:
-            kwargs['error'] =  'Group {0} does not have a profile.'.format(kwargs['group_name'],)
-    except Group.DoesNotExist:
-        kwargs['error'] = 'There are no groups with name: {0}'.format(kwargs['group_name'],)
-    return render(request, 'profiles/group.html', kwargs)
 
 def get_bot_profile(request, **kwargs):
     try:

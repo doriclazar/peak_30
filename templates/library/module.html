@@ -9,13 +9,6 @@
 <p>Creation Date: {{ module.creation_date }}</p>
 <p>Creator:<a href="{% url 'get_user_profile' username=module.creator.username %}">{{ module.creator.get_full_name }}</a></p>
 
-<p>Professions List:</p>
-<ul class='list-unstyled'>
-{% for profession in professions %}
-<li><a href="{% url 'get_profession' profession_code=profession.code %}">{{ profession.name }}</a></li>
-{% endfor %}
-</ul>
-
 <p>Commands List:</p>
 <ul class='list-unstyled'>
 {% for command in commands %}
