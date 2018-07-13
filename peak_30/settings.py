@@ -35,12 +35,14 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
+#    'django.contrib.messages',
     'django.contrib.staticfiles',
     'dashboard',
     'profiles',
     'library',
     'bots',
+    'schedule',
+    'messages',
     'bootstrap3',
 ]
 
@@ -123,8 +125,8 @@ ACCOUNT_ACTIVATION_DAYS = 7
 
 LOGIN_REDIRECT_URL = '/profiles/bots'
     
+STATIC_URL = '/static/'
+STATIC_ROOT = '/home/contact/peak_30/static/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
-STATIC_URL = '/static/'

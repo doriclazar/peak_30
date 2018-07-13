@@ -1,28 +1,77 @@
 <nav class="navbar navbar-inverse">
-	<div class="container-fluid">
-		<div class="navbar-header">
-			<a class="navbar-brand" href="{% url 'get_dashboard' %}">Peak 30</a>
-		</div>
-		<ul class="nav navbar-nav">
-			<li>
-				<a href="{% url 'get_profiles' %}">Profiles <span class="glyphicon glyphicon-option-vertical"></span></a>
-			</li>
-			<li>
-				<a href="#">Calendar <span class="glyphicon glyphicon-calendar"></span></a>
-			</li>
-			<li>
-				<a href="{% url 'get_library' %}">Library <span class="glyphicon glyphicon-book"></span></a>
-			</li>
-		</ul>
-		<ul class="nav navbar-nav navbar-right">
-			{% if request.user.is_authenticated %}
-			<li><a href="">{{ request.user.get_unread_count }} <span class="glyphicon glyphicon-envelope"></span></a></li>
-			<li><a href="{% url 'get_user_profile' username=request.user.username %}">{{ request.user.first_name }} <span class="glyphicon glyphicon-user"></span></a></li>
-			<li><a href="{% url 'auth_logout' %}">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
-			{% else %}
-			<li><a href="{% url 'auth_login' %}">Login <span class="glyphicon glyphicon-log-in"></span></a></li>
-			{% endif %}
+  <ul class="nav navbar-nav navbar-left">
+    <li>
+      <a class="text-center " href="{% url 'get_dashboard' %} "><span class="glyphicon glyphicon-dashboard"></span><br>Dashboard</a>
+    </li>
+    <li class="dropdown">
+      <a class="text-center dropdown-toggle" id="dropdownProfiles" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><span class="glyphicon glyphicon-user"></span><br>Profiles</a>
+      <ul class="dropdown-menu" aria-labelledby="dropdownProfiles">
+      <li>Groups
+	{% include "base/navbar_items/navdrop_item.html" with url_arg="get_groups" glyph_arg="glyphicon-plus" text_arg="Create new group"  %}
+	{% include "base/navbar_items/navdrop_item.html" with url_arg="get_groups" glyph_arg="glyphicon-list" text_arg="List visible groups"  %}
+      <li role="separator" class="divider"></li>
+      <li>Users
+	{% include "base/navbar_items/navdrop_item.html" with url_arg="get_users" glyph_arg="glyphicon-plus" text_arg="Create new user"  %}
+	{% include "base/navbar_items/navdrop_item.html" with url_arg="get_users" glyph_arg="glyphicon-list" text_arg="List visible users"  %}
+      <li role="separator" class="divider"></li>
+      <li>Bots
+	{% include "base/navbar_items/navdrop_item.html" with url_arg="get_bots" glyph_arg="glyphicon-plus" text_arg="Create new bot"  %}
+	{% include "base/navbar_items/navdrop_item.html" with url_arg="get_bots" glyph_arg="glyphicon-list" text_arg="List visible bots"  %}
+      </ul>
+    </li>
+    <li class="dropdown">
+      <a class="text-center dropdown-toggle" id="dropdownLibrary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="{% url 'get_library' %}"><span class="glyphicon glyphicon-book"></span><br>Library</a>
+      <ul class="dropdown-menu" aria-labelledby="dropdownProfiles">
+	<li>Professions
+	  <a href="{% url 'get_professions' %}"><span class="glyphicon glyphicon-plus"></span> Create new profession</a>
+	  <a href="{% url 'get_professions' %}"><span class="glyphicon glyphicon-list"></span> List professions</a></li>
+	<li role="separator" class="divider"></li>
+	<li>Modules
+	  <a href="{% url 'get_modules' %}"><span class="glyphicon glyphicon-plus"></span> Create new module</a>
+	  <a href="{% url 'get_modules' %}"><span class="glyphicon glyphicon-list"></span> List modules</a></li>
+	<li role="separator" class="divider"></li>
+	<li>Categories
+	  <a href="{% url 'get_categories' %}"><span class="glyphicon glyphicon-plus"></span> Create new category</a>
+	  <a href="{% url 'get_categories' %}"><span class="glyphicon glyphicon-list"></span> List categories</a></li>
+	<li role="separator" class="divider"></li>
+	<li>Commands
+	  <a href="{% url 'get_commands' %}"><span class="glyphicon glyphicon-plus"></span> Create new command</a>
+	  <a href="{% url 'get_commands' %}"><span class="glyphicon glyphicon-list"></span> List commands</a></li>
+      </ul>
+    </li>
+    <li class="dropdown">
+      <a class="text-center" href="#"><span class="glyphicon glyphicon-calendar"></span><br>Calendar</a>
+    </li>
+  </ul>
+  <ul class="nav navbar-nav navbar-right">
+    {% if request.user.is_authenticated %}
+    <li class="dropdown">
+      <a class="text-center dropdown-toggle" id="dropdownUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><span class="glyphicon glyphicon-picture"></span><br>{{ request.user.first_name }}</a>
+      <ul class="dropdown-menu" aria-labelledby="dropdownUser">
+	<li>Profile
+	  <a href="{% url 'get_user_profile' username=request.user.username %}"><span class="glyphicon glyphicon-eye-open"></span> View</a>
+	  <a href="{% url 'get_user_profile' username=request.user.username %}"><span class="glyphicon glyphicon-wrench"></span> Settings</a></li>
+	<li role="separator" class="divider"></li>
+	<li>Messages
+		<a href="{% url 'get_messages' %}"><span class="glyphicon glyphicon-inbox"></span> Inbox</a>
+		<a href="{% url 'get_messages' %}"><span class="glyphicon glyphicon-envelope"></span> Outbox</a></li>
+	<li role="separator" class="divider"></li>
+	<li><a href="{% url 'auth_logout' %}">Logout <span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
+      </ul>
+    </li>
+    {% else %}
+    <li><a href="{% url 'auth_login' %}">Login <span class="glyphicon glyphicon-log-in"></span></a></li>
+    {% endif %}
+  </ul>
 
-		</ul>
-	</div>
+  <ul class="nav navbar-nav navbar-right">
+    <form class="navbar-form">
+      <div class="input-group">
+	<input type="text" class="form-control" placeholder="Search">
+	<span class="input-group-btn">
+	  <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+	</span>
+      </div>
+    </form>
+  </ul>
 </nav>

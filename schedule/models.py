@@ -4,15 +4,14 @@ from bots.models import Bot
 from library.models import Command
 
 class Appointment(models.Model):
-    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    user = models.ForeignKey(User, null=True, on_delete=models.DO_NOTHING)
+    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='appointment_creator')
+    user = models.ForeignKey(User, null=True, on_delete=models.DO_NOTHING, related_name='appointment_user')
     group = models.ForeignKey(Group, null=True, on_delete=models.DO_NOTHING)
     bot = models.ForeignKey(Bot, null=True, on_delete=models.DO_NOTHING)
     code = models.CharField(max_length = 16, default='')
     description = models.CharField(max_length = 1024)
-    creation_time = models.DateTimeField(default=models.timezone.now)
+    creation_time = models.DateTimeField()
     read_time = models.DateTimeField(null=True)
-    appointment_type = (choices = APPOINTMENT_TYPES)
     active = models.BooleanField(default=True)
     def clean(self):
         input_count = 0
@@ -32,6 +31,13 @@ class TimeLine(models.Model):
     Represents the date and time at which the appointment is active.
     "is_skip" variable overlays active time from other record as a pause in activity.
     '''
+    MONDAY = 1
+    TUESDAY = 2
+    WEDNESDAY = 3
+    THURSDAY = 4
+    FRIDAY = 5
+    SATURDAY = 6
+    SUNDAY = 7
     DAYS_OF_WEEK = (
         (MONDAY, 'Monday'),
         (TUESDAY, 'Tuesday'),
@@ -42,8 +48,8 @@ class TimeLine(models.Model):
         (SUNDAY, 'Sunday'),
         )
     appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE)
-    start_day = models.CharField(max_length = 8, choices = DAYS_OF_WEEK, null=True)
-    end_day = models.CharField(max_length = 8, choices = DAYS_OF_WEEK, null=True)
+    start_day = models.IntegerField(choices = DAYS_OF_WEEK, null=True)
+    end_day = models.IntegerField(choices = DAYS_OF_WEEK, null=True)
     start_date = models.DateField(null=True)
     end_date = models.DateField(null=True)
     start_time = models.TimeField(null=True)
