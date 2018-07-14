@@ -175,15 +175,26 @@
 	<h2>{{ event.grouper }}</h2>
 	</br>
 	{% for timespan in event.list %}
-	<h4><b>{{ timespan.get_start_day }}</b> through <b>{{ timespan.get_end_day }}</b></h4>
+		</br>
+	<h5>{{ timespan.name }}</h5>
+		{% if timespan.start_day %}
+		<h4><b>{{ timespan.get_start_day }}</b> through <b>{{ timespan.get_end_day }}</b></h4>
+		{% endif %}
+		{% if timespan.start_date %}
+		<h4><b>{{ timespan.start_date }}</b> through <b>{{ timespan.end_date }}</b></h4>
+		{% endif %}
+		{% if timespan.start_time %}
+		<h4><b>{{ timespan.start_time }}</b> through <b>{{ timespan.end_time }}</b></h4>
+		{% endif %}
+
 	{% endfor %}
 	{% for event_data in event.list|slice:"1" %}
-	<h3>{{ event_data.event.description|truncatechars:20 }}</h3>
-	</br>
-	<h5>Created: {{ event_data.event.creation_time }}</h5>
-	{% endfor %}
+		<h3>{{ event_data.event.description|truncatechars:20 }}</h3>
+		</br>
+		<h5>Created: {{ event_data.event.creation_time }}</h5>
 	{% endfor %}
         </div>
+	{% endfor %}
     </div>
   </div>
 </div>
