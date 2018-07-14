@@ -3,15 +3,16 @@ from django.contrib.auth.models import User, Group
 from bots.models import Bot
 from library.models import Command
 
-class Appointment(models.Model):
+class Event(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='appointment_creator')
-    user = models.ForeignKey(User, null=True, on_delete=models.DO_NOTHING, related_name='appointment_user')
-    group = models.ForeignKey(Group, null=True, on_delete=models.DO_NOTHING)
-    bot = models.ForeignKey(Bot, null=True, on_delete=models.DO_NOTHING)
+    name = models.CharField(max_length = 32)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING, related_name='appointment_user')
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.DO_NOTHING)
+    bot = models.ForeignKey(Bot, null=True, blank=True, on_delete=models.DO_NOTHING)
     code = models.CharField(max_length = 16, default='')
     description = models.CharField(max_length = 1024)
     creation_time = models.DateTimeField()
-    read_time = models.DateTimeField(null=True)
+    read_time = models.DateTimeField(null=True, blank=True)
     active = models.BooleanField(default=True)
     def clean(self):
         input_count = 0
@@ -26,11 +27,7 @@ class Appointment(models.Model):
         elif input_count==0:
             raise ValidationError('Original receiver is not specified.')
 
-class TimeLine(models.Model):
-    '''
-    Represents the date and time at which the appointment is active.
-    "is_skip" variable overlays active time from other record as a pause in activity.
-    '''
+class TimeSpan(models.Model):
     MONDAY = 1
     TUESDAY = 2
     WEDNESDAY = 3
@@ -47,13 +44,13 @@ class TimeLine(models.Model):
         (SATURDAY, 'Saturday'),
         (SUNDAY, 'Sunday'),
         )
-    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE)
-    start_day = models.IntegerField(choices = DAYS_OF_WEEK, null=True)
-    end_day = models.IntegerField(choices = DAYS_OF_WEEK, null=True)
-    start_date = models.DateField(null=True)
-    end_date = models.DateField(null=True)
-    start_time = models.TimeField(null=True)
-    end_time = models.TimeField(null=True)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    start_day = models.IntegerField(choices = DAYS_OF_WEEK, null=True, blank=True)
+    end_day = models.IntegerField(choices = DAYS_OF_WEEK, null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    start_time = models.TimeField(null=True, blank=True)
+    end_time = models.TimeField(null=True, blank=True)
     is_skip = models.BooleanField(default=False)
     def clean(self):
         if not self.start_day and self.end_day:
@@ -66,9 +63,14 @@ class TimeLine(models.Model):
             raise ValidationError('"Date" and "Day" varibles are mutualy exclusive for timeline.')
         if not self.start_day and not self.start_date and not self.start_time:
             raise ValidationError('Timeline input does not contain any time values.')
+    def get_start_day(self):
+        return self.DAYS_OF_WEEK[self.start_day-1][1]
+    def get_end_day(self):
+        return self.DAYS_OF_WEEK[self.end_day-1][1]
+        
 
-class AppointmentCommand(models.Model):
-    appointment = models.ForeignKey(Appointment, on_delete = models.CASCADE)
+class EventCommand(models.Model):
+    event = models.ForeignKey(Event, on_delete = models.CASCADE)
     command = models.ForeignKey(Command, on_delete = models.DO_NOTHING)
     description = models.CharField(max_length = 1024)
 

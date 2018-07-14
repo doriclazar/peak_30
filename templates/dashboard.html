@@ -169,6 +169,21 @@
 
     </div>
     <div class="col-md-4">
+	{% regroup timespans by event.name as event_list %} 
+	{% for event in event_list %}
+        <div class="jumbotron">
+	<h2>{{ event.grouper }}</h2>
+	</br>
+	{% for timespan in event.list %}
+	<h4><b>{{ timespan.get_start_day }}</b> through <b>{{ timespan.get_end_day }}</b></h4>
+	{% endfor %}
+	{% for event_data in event.list|slice:"1" %}
+	<h3>{{ event_data.event.description|truncatechars:20 }}</h3>
+	</br>
+	<h5>Created: {{ event_data.event.creation_time }}</h5>
+	{% endfor %}
+	{% endfor %}
+        </div>
     </div>
   </div>
 </div>
