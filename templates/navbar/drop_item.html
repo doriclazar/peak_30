@@ -1,0 +1,5 @@
+{% if url_par_arg|length > 0 %}
+<a href="{% url url_arg url_par_arg %}"><span class="glyphicon {{ glyph_arg }}"></span> {{ text_arg }}</a>
+{% else %}
+<a href="{% url url_arg %}"><span class="glyphicon {{ glyph_arg }}"></span> {{ text_arg }}</a>
+{% endif %}

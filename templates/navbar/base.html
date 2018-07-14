@@ -1,0 +1,79 @@
+<nav class="navbar navbar-inverse">
+  <ul class="nav navbar-nav navbar-left">
+    <li>
+      {% include "navbar/visual_link.html" with url_arg="get_dashboard" glyph_arg="glyphicon-dashboard" text_arg="Dashboard" %}
+    </li>
+    <li class="dropdown">
+      {% include "navbar/drop_toggle.html" with id_arg="dropdownProfiles" glyph_arg="glyphicon-user" text_arg="Profiles" %}
+      <ul class="dropdown-menu" aria-labelledby="dropdownProfiles">
+	{% include "navbar/drop_header.html" with first_arg=True text_arg="Groups" %}
+	{% include "navbar/drop_item.html" with url_arg="get_groups" glyph_arg="glyphicon-plus" text_arg="Create new group"  %}
+	{% include "navbar/drop_item.html" with url_arg="get_groups" glyph_arg="glyphicon-list" text_arg="List visible groups"  %}</li>
+	{% include "navbar/drop_header.html" with first_arg=False text_arg="Users" %}
+	{% include "navbar/drop_item.html" with url_arg="get_users" glyph_arg="glyphicon-plus" text_arg="Create new user"  %}
+	{% include "navbar/drop_item.html" with url_arg="get_users" glyph_arg="glyphicon-list" text_arg="List visible users"  %}</li>
+	{% include "navbar/drop_header.html" with first_arg=False text_arg="Bots" %}
+	{% include "navbar/drop_item.html" with url_arg="get_bots" glyph_arg="glyphicon-plus" text_arg="Create new bot"  %}
+	{% include "navbar/drop_item.html" with url_arg="get_bots" glyph_arg="glyphicon-list" text_arg="List visible bots"  %}</li>
+      </ul>
+    </li>
+    <li class="dropdown">
+      {% include "navbar/drop_toggle.html" with id_arg="dropdownLibrary" glyph_arg="glyphicon-book" text_arg="Library" %}
+      <ul class="dropdown-menu" aria-labelledby="dropdownLibrary">
+	{% include "navbar/drop_header.html" with first_arg=True text_arg="Professions" %}
+	{% include "navbar/drop_item.html" with url_arg="get_professions" glyph_arg="glyphicon-plus" text_arg="Create new profession"  %}
+	{% include "navbar/drop_item.html" with url_arg="get_professions" glyph_arg="glyphicon-list" text_arg="List professions"  %}</li>
+	{% include "navbar/drop_header.html" with first_arg=False text_arg="Modules" %}
+	{% include "navbar/drop_item.html" with url_arg="get_modules" glyph_arg="glyphicon-plus" text_arg="Create new module"  %}
+	{% include "navbar/drop_item.html" with url_arg="get_modules" glyph_arg="glyphicon-list" text_arg="List moudules"  %}</li>
+	{% include "navbar/drop_header.html" with first_arg=False text_arg="Categories" %}
+	{% include "navbar/drop_item.html" with url_arg="get_categories" glyph_arg="glyphicon-plus" text_arg="Create new category"  %}
+	{% include "navbar/drop_item.html" with url_arg="get_categories" glyph_arg="glyphicon-list" text_arg="List categories"  %}</li>
+	{% include "navbar/drop_header.html" with first_arg=False text_arg="Commands" %}
+	{% include "navbar/drop_item.html" with url_arg="get_commands" glyph_arg="glyphicon-plus" text_arg="Create new command"  %}
+	{% include "navbar/drop_item.html" with url_arg="get_commands" glyph_arg="glyphicon-list" text_arg="List commands"  %}</li>
+      </ul>
+    </li>
+    <li class="dropdown">
+      {% include "navbar/drop_toggle.html" with id_arg="dropdownCalendar" glyph_arg="glyphicon-calendar" text_arg="Calendar" %}
+      <ul class="dropdown-menu" aria-labelledby="dropdownCalendar">
+	{% include "navbar/drop_header.html" with first_arg=True text_arg="Events" %}
+	{% include "navbar/drop_item.html" with url_arg="get_professions" glyph_arg="glyphicon-plus" text_arg="Create new event"  %}
+	{% include "navbar/drop_item.html" with url_arg="get_professions" glyph_arg="glyphicon-list" text_arg="List events"  %}</li>
+	{% include "navbar/drop_header.html" with first_arg=False text_arg="Tasks" %}
+	{% include "navbar/drop_item.html" with url_arg="get_professions" glyph_arg="glyphicon-plus" text_arg="Create new task"  %}
+	{% include "navbar/drop_item.html" with url_arg="get_professions" glyph_arg="glyphicon-list" text_arg="List tasks"  %}</li>
+     </ul>
+    </li>
+  </ul>
+  <ul class="nav navbar-nav navbar-right">
+    {% if request.user.is_authenticated %}
+    <li class="dropdown">
+      {% include "navbar/drop_toggle.html" with id_arg="dropdownUser" glyph_arg="glyphicon-picture" text_arg=request.user.first_name %}
+      <ul class="dropdown-menu" aria-labelledby="dropdownUser">
+	{% include "navbar/drop_header.html" with first_arg=True text_arg="Profile" %}
+	{% include "navbar/drop_item.html" with url_arg="get_user_profile" url_par_arg=request.user.username glyph_arg="glyphicon-eye-open" text_arg="View"  %}
+	{% include "navbar/drop_item.html" with url_arg="get_user_profile" url_par_arg=request.user.username glyph_arg="glyphicon-cog" text_arg="Settings"  %}</li>
+	{% include "navbar/drop_header.html" with first_arg=False text_arg="Messages" %}
+	{% include "navbar/drop_item.html" with url_arg="get_messages" glyph_arg="glyphicon-inbox" text_arg="Inbox"  %}
+	{% include "navbar/drop_item.html" with url_arg="get_messages" glyph_arg="glyphicon-envelope" text_arg="Outbox" %}</li>
+	{% include "navbar/drop_header.html" with first_arg=False text_arg="Session" %}
+	{% include "navbar/drop_item.html" with url_arg="auth_logout" glyph_arg="glyphicon-log-out" text_arg="Logout" %}</li>
+      </ul>
+    </li>
+    {% else %}
+    <li><a href="{% url 'auth_login' %}">Login <span class="glyphicon glyphicon-log-in"></span></a></li>
+    {% endif %}
+  </ul>
+
+  <ul class="nav navbar-nav navbar-right">
+    <form class="navbar-form">
+      <div class="input-group">
+	<input type="text" class="form-control" placeholder="Search">
+	<span class="input-group-btn">
+	  <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+	</span>
+      </div>
+    </form>
+  </ul>
+</nav>

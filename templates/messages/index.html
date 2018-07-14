@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>EXTENSION: messages</h1>
+
+<table class="table table-hover">
+<thead>
+<tr>
+<th scope="col">Title</th>
+<th scope="col">From</th>
+<th scope="col">Received Date</th>
+</tr>
+</thead>
+<tbody>
+{% for message in user_inbox %}
+<tr>
+<td><a href="{% url 'get_message' message_code=message.code %}">{{ message.title }}</a></td>
+<td>{{ message.creator.get_full_name }}</td>
+<td>{{ message.creation_time }}</td>
+</tr>
+{% endfor %}
+{% for message in user_cc %}
+<tr>
+<td><a href="{% url 'get_message' message_code=message.code %}">{{ message.title }}</a></td>
+<td>{{ message.creator.get_full_name }}</td>
+<td>{{ message.creation_time }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+
+<table class="table table-hover">
+<thead>
+<tr>
+<th scope="col">Title</th>
+<th scope="col">Receiver</th>
+<th scope="col">Received Date</th>
+</tr>
+</thead>
+<tbody>
+{% for message in user_outbox %}
+<tr>
+<td><a href="{% url 'get_message' message_code=message.code %}">{{ message.title }}</a></td>
+<td>{{ message.user.get_full_name }}</td>
+<td>{{ message.creation_time }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+<h2>{{ error }}</h2>
+{% endblock %}
