@@ -126,4 +126,4 @@ ACCOUNT_ACTIVATION_DAYS = 7
 LOGIN_REDIRECT_URL = '/profiles/bots'
     
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/contact/peak_30/static/'
+STATIC_ROOT = '/home/contact/peak_30/static/s/'

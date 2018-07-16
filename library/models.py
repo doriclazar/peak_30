@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 class Profession(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     picture = models.URLField(default = '')
+    icon = models.CharField(max_length=64, default = 'fas fa-briefcase')
+    color = models.CharField(max_length=8, default='ffcf9e')
     name = models.CharField(max_length = 32)
     code = models.CharField(max_length = 16, default='')
     description = models.CharField(max_length = 1024)
@@ -21,6 +23,7 @@ class Profession(models.Model):
 class Module(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     profession = models.ForeignKey(Profession, on_delete=models.DO_NOTHING)
+    icon = models.CharField(max_length=64, default = 'fas fa-puzzle-piece')
     picture = models.URLField(default = '')
     name = models.CharField(max_length = 32)
     code = models.CharField(max_length = 16, default='')
@@ -33,6 +36,7 @@ class Module(models.Model):
 class Category(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     picture = models.URLField(default = '')
+    icon = models.CharField(max_length=64, default = 'fas fa-object-group')
     name = models.CharField(max_length = 32)
     code = models.CharField(max_length = 16, default='')
     description = models.CharField(max_length = 1024)

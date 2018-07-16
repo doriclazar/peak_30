@@ -1,31 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
 from bots.models import Bot
-from library.models import Command
+from library.models import Profession, Command
 
 class Event(models.Model):
-    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='appointment_creator')
+    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     name = models.CharField(max_length = 32)
-    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING, related_name='appointment_user')
-    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.DO_NOTHING)
-    bot = models.ForeignKey(Bot, null=True, blank=True, on_delete=models.DO_NOTHING)
     code = models.CharField(max_length = 16, default='')
     description = models.CharField(max_length = 1024)
     creation_time = models.DateTimeField()
     read_time = models.DateTimeField(null=True, blank=True)
     active = models.BooleanField(default=True)
-    def clean(self):
-        input_count = 0
-        if self.user:
-            input_count+=1
-        if self.group:
-            input_count+=1
-        if self.bot:
-            input_count+=1
-        if input_count>1:
-            raise ValidationError('Original receiver can either be a bot, a user, or a group.')
-        elif input_count==0:
-            raise ValidationError('Original receiver is not specified.')
     def __str__(self):
        return '{0} {1} {2}'.format(self.creator, self.name, self.creation_time)
 
@@ -48,6 +33,11 @@ class TimeSpan(models.Model):
         )
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     name = models.CharField(max_length = 32)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING)
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.DO_NOTHING)
+    bot = models.ForeignKey(Bot, null=True, blank=True, on_delete=models.DO_NOTHING)
+    profession = models.ForeignKey(Profession, null=True, blank=True, on_delete=models.DO_NOTHING)
+    description = models.CharField(max_length = 1024, null=True, blank=True)
     start_day = models.IntegerField(choices = DAYS_OF_WEEK, null=True, blank=True)
     end_day = models.IntegerField(choices = DAYS_OF_WEEK, null=True, blank=True)
     start_date = models.DateField(null=True, blank=True)
@@ -56,14 +46,33 @@ class TimeSpan(models.Model):
     end_time = models.TimeField(null=True, blank=True)
     is_skip = models.BooleanField(default=False)
     def clean(self):
+        input_count = 0
+        if self.user:
+            input_count+=1
+        if self.group:
+            input_count+=1
+        if self.bot:
+            input_count+=1
+        if self.profession:
+            input_count+=1
+        if input_count>1:
+            raise ValidationError('Original receiver can either be a bot, a user, or a group.')
+        elif input_count==0:
+            raise ValidationError('Original receiver is not specified.')
+
         if not self.start_day and self.end_day:
             raise ValidationError('Need a start day.')
+
         if not self.start_date and self.end_date:
             raise ValidationError('Need a start date.')
+
         if (not self.start_time and self.end_time) or (self.start_time and not self.end_time):
             raise ValidationError('Time must be defined with "from" - "until" varibales.')
-        if self.start_day and self.start_date:
-            raise ValidationError('"Date" and "Day" varibles are mutualy exclusive for timeline.')
+
+        # 
+        # if self.start_day and self.start_date:
+        #    raise ValidationError('"Date" and "Day" varibles are mutualy exclusive for timeline.')
+
         if not self.start_day and not self.start_date and not self.start_time:
             raise ValidationError('Timeline input does not contain any time values.')
 
@@ -81,8 +90,30 @@ class TimeSpan(models.Model):
             result = self.DAYS_OF_WEEK[6][1]
         return result
 
+    def get_actor_name(self):
+        if self.user:
+            actor_name=self.user.get_full_name()
+        elif self.group:
+            actor_name=self.group.name
+        elif self.bot:
+            actor_name=self.bot.name
+        elif self.profession:
+            actor_name=self.profession.name
+        return actor_name
+
+    def get_actor_color(self):
+        if self.user:
+            actor_color=self.user.user_profile.color
+        elif self.group:
+            actor_color=self.group.group_profile.color
+        elif self.bot:
+            actor_color=self.bot.bot_profile.color
+        elif self.profession:
+            actor_color=self.profession.color
+        return actor_color
+
     def __str__(self):
-       return '{0} {1}'.format(self.event.name, self.is_skip)
+        return '{0} {1}'.format(self.name, self.get_actor_name())
         
 
 class EventCommand(models.Model):

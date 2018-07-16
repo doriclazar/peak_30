@@ -11,6 +11,7 @@
 	  <thead>
 	    <tr>
 	      <th scope="col"></th>
+	      <th scope="col"></th>
 	      <th scope="col">Name</th>
 	      <th scope="col">Rating</th>
 	      <th scope="col">Created</th>
@@ -19,7 +20,8 @@
 	  <tbody>
 	    {% for group_profile in group_profiles|slice:":5" %}
 	    <tr>
-	      <td><img src={{ group_profile.picture }}/></td>
+	      <td><span class="dot" style="height:25px; width:25px; border-radius:50%; background-color:#{{ group_profile.color }}; display:inline-block"></span></td>
+	      <td><i class="{{ group_profile.icon }}"></i></td>
 	      <td><a href="{% url 'get_group_profile' group_name=group_profile.group.name %}">{{ group_profile.group.name }}</a></td>
 	      <td>{{ group_profile.rating }}</td>
 	      <td>{{ group_profile.creation_date }}</td>
@@ -35,6 +37,7 @@
 	  <thead>
 	    <tr>
 	      <th scope="col"></th>
+	      <th scope="col"></th>
 	      <th scope="col">Full Name</th>
 	      <th scope="col">Rating</th>
 	      <th scope="col">Created</th>
@@ -43,7 +46,8 @@
 	  <tbody>
 	    {% for user_profile in user_profiles|slice:":5" %}
 	    <tr>
-	      <td><img src={{ user_profile.picture }}/></td>
+	      <td><span class="dot" style="height:25px; width:25px; border-radius:50%; background-color:#{{ user_profile.color }}; display:inline-block"></span></td>
+	      <td><i class="{{ user_profile.icon }}"></i></td>
 	      <td><a href="{% url 'get_user_profile' username=user_profile.user.username %}">{{ user_profile.user.get_full_name }}</a></td>
 	      <td>{{ user_profile.rating }}</td>
 	      <td>{{ user_profile.creation_date }}</td>
@@ -59,6 +63,7 @@
 	  <thead>
 	    <tr>
 	      <th scope="col"></th>
+	      <th scope="col"></th>
 	      <th scope="col">Name</th>
 	      <th scope="col">Rating</th>
 	      <th scope="col">Created</th>
@@ -67,7 +72,8 @@
 	  <tbody>
 	    {% for bot in bots|slice:":5" %}
 	    <tr>
-	      <td><img src={{ bot.picture }}/></td>
+	      <td><span class="dot" style="height:25px; width:25px; border-radius:50%; background-color:#{{ bot.bot_profile.color }}; display:inline-block"></span></td>
+	      <td><i class="{{ bot.bot_profile.icon }}"></i></td>
 	      <td><a href="{% url 'get_bot_profile' bot_code=bot.code %}">{{ bot.name }}</a></td>
 	      <td>{{ bot.rating }}</td>
 	      <td>{{ bot.creation_date }}</td>
@@ -85,6 +91,7 @@
 	  <thead>
 	    <tr>
 	      <th scope="col"></th>
+	      <th scope="col"></th>
 	      <th scope="col">Name</th>
 	      <th scope="col">Created</th>
 	    </tr>
@@ -92,7 +99,8 @@
 	  <tbody>
 	    {% for profession in professions|slice:":5" %}
 	    <tr>
-	      <td><img src={{ profession.picture }}/></td>
+	      <td><span class="dot" style="height:25px; width:25px; border-radius:50%; background-color:#{{ profession.color }}; display:inline-block"></span></td>
+	      <td><i class="{{ profession.icon }}"></i></td>
 	      <td><a href="{% url 'get_profession' profession_code=profession.code %}">{{ profession.name }}</a></td>
 	      <td>{{ profession.creation_date }}</td>
 	    </tr>
@@ -114,7 +122,7 @@
 	  <tbody>
 	    {% for module in modules|slice:":5" %}
 	    <tr>
-	      <td><img src={{ module.picture }}/></td>
+	      <td><i class="{{ module.icon }}"></i></td>
 	      <td><a href="{% url 'get_module' module_code=module.code %}">{{ module.name }}</a></td>
 	      <td>{{ module.creation_date }}</td>
 	    </tr>
@@ -136,7 +144,7 @@
 	  <tbody>
 	    {% for category in categories|slice:":5" %}
 	    <tr>
-	      <td><img src={{ category.picture }}/></td>
+	      <td><i class="{{ category.icon }}"></i></td>
 	      <td><a href="{% url 'get_category' category_code=category.code %}">{{ category.name }}</a></td>
 	      <td>{{ category.creation_date }}</td>
 	    </tr>
@@ -150,7 +158,6 @@
 	<table class="table">
 	  <thead>
 	    <tr>
-	      <th scope="col"></th>
 	      <th scope="col">Name</th>
 	      <th scope="col">Created</th>
 	    </tr>
@@ -158,7 +165,6 @@
 	  <tbody>
 	    {% for command in commands|slice:":5" %}
 	    <tr>
-	      <td><img src={{ command.picture }}/></td>
 	      <td><a href="{% url 'get_command' command_code=command.code %}">{{ command.name }}</a></td>
 	      <td>{{ command.creation_date }}</td>
 	    </tr>
@@ -173,10 +179,18 @@
 	{% for event in event_list %}
         <div class="jumbotron">
 	<h2>{{ event.grouper }}</h2>
+	{% for event_data in event.list|slice:"1" %}
+		<h5>Created: {{ event_data.event.creation_time }}</h5>
+		</br>
+		<h3>{{ event_data.event.description|truncatechars:50 }}</h3>
+	{% endfor %}
 	</br>
 	{% for timespan in event.list %}
 		</br>
-	<h5>{{ timespan.name }}</h5>
+		<hr />
+		<h5><mark style="background-color:#{{ timespan.get_actor_color }};">{{ timespan.name }}</mark></h5>
+	<h5>{{ timespan.get_actor_name }}</h5>
+
 		{% if timespan.start_day %}
 		<h4><b>{{ timespan.get_start_day }}</b> through <b>{{ timespan.get_end_day }}</b></h4>
 		{% endif %}
@@ -186,12 +200,6 @@
 		{% if timespan.start_time %}
 		<h4><b>{{ timespan.start_time }}</b> through <b>{{ timespan.end_time }}</b></h4>
 		{% endif %}
-
-	{% endfor %}
-	{% for event_data in event.list|slice:"1" %}
-		<h3>{{ event_data.event.description|truncatechars:20 }}</h3>
-		</br>
-		<h5>Created: {{ event_data.event.creation_time }}</h5>
 	{% endfor %}
         </div>
 	{% endfor %}
