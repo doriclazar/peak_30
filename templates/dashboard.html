@@ -185,13 +185,17 @@
 		<h5>Created: {{ event_data.event.creation_time }}
 			</br> by <a href={% url 'get_user_profile' username=event_data.event.creator.username %}>{{ event_data.event.creator.get_full_name }}</a></h5>
 		</br>
-		<h3>{{ event_data.event.description|truncatechars:50 }}</h3>
+		<h5>{{ event_data.event.description|truncatechars:100 }}</h5>
 	{% endfor %}
 	</br>
 	{% for timespan in event.list %}
 		<div style="border-left:5px solid #{{ timespan.get_actor_color }}; padding-left:5px;">
+		<h4>{{ timespan.name }}</h4>
+		<h5>Assigned by: {{ timespan.creator.get_full_name }}</h5>
+
+		</br>
+
 		<h4>{{ timespan.get_actor_name }}</h4>
-		<h5>{{ timespan.name }}</h5>
 		{% if timespan.start_day %}
 		<h4><b>{{ timespan.get_start_day }}</b> through <b>{{ timespan.get_end_day }}</b></h4>
 		{% endif %}

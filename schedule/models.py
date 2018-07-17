@@ -31,6 +31,7 @@ class TimeSpan(models.Model):
         (SATURDAY, 'Saturday'),
         (SUNDAY, 'Sunday'),
         )
+    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='timespan_creator')
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     name = models.CharField(max_length = 32)
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING)
