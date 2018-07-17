@@ -31,11 +31,11 @@ ALLOWED_HOSTS = ['35.202.63.188']
 # Application definition
 
 INSTALLED_APPS = [
+#    'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-#    'django.contrib.messages',
     'django.contrib.staticfiles',
     'dashboard',
     'profiles',
@@ -126,4 +126,4 @@ ACCOUNT_ACTIVATION_DAYS = 7
 LOGIN_REDIRECT_URL = '/profiles/bots'
     
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/contact/peak_30/static/s/'
+STATIC_ROOT = '/home/contact/peak_30/static/'
