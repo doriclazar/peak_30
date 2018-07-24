@@ -1,7 +1,7 @@
 {% load static %}
 <link rel="stylesheet" href={% static "dashboard/css/navbar.css" %}>
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
     <div class="row">
       <div class="col-md-4">
@@ -9,7 +9,7 @@
 	<ul class="nav navbar-nav navbar-left">
 	  <li>
 	    <a class="navbar navbar-brand" href="{% url 'get_dashboard' %}" height=50px style="padding: 0 10px; margin-bottom:0;">
-	      <img src={% static "dashboard/img/logo_nav.png" %} alt="Peak 30" height=50px ></a>
+	      <img src={% static "dashboard/img/peak30_log.png" %} alt="Peak 30" height=50px ></a>
 	  </li>
 	  <li class="dropdown">
 	    {% include "navbar/drop_toggle.html" with id_arg="dropdownProfiles" icon_arg="fas fa-id-card" text_arg="Profiles" %}
@@ -74,11 +74,11 @@
 	    {% include "navbar/drop_toggle.html" with id_arg="dropdownUser" icon_arg="fas fa-image" text_arg=request.user.first_name %}
 	    <ul class="dropdown-menu" aria-labelledby="dropdownUser">
 	      {% include "navbar/drop_header.html" with first_arg=True text_arg="Profile" %}
-	      {% include "navbar/drop_item.html" with url_arg="get_user_profile" url_par_arg=request.user.username icon_arg="glyphicon-eye-open" text_arg="View"  %}
-	      {% include "navbar/drop_item.html" with url_arg="get_user_profile" url_par_arg=request.user.username icon_arg="glyphicon-cog" text_arg="Settings"  %}</li>
+	      {% include "navbar/drop_item.html" with url_arg="get_user_profile" url_par_arg=request.user.username icon_arg="fas fa-eye" text_arg="View"  %}
+	      {% include "navbar/drop_item.html" with url_arg="get_user_profile" url_par_arg=request.user.username icon_arg="fas fa-cogs" text_arg="Settings"  %}</li>
 	  {% include "navbar/drop_header.html" with first_arg=False text_arg="Messages" %}
-	  {% include "navbar/drop_item.html" with url_arg="get_messages" icon_arg="glyphicon-inbox" text_arg="Inbox"  %}
-	  {% include "navbar/drop_item.html" with url_arg="get_messages" icon_arg="glyphicon-envelope" text_arg="Outbox" %}</li>
+	  {% include "navbar/drop_item.html" with url_arg="get_messages" icon_arg="fas fa-inbox" text_arg="Inbox"  %}
+	  {% include "navbar/drop_item.html" with url_arg="get_messages" icon_arg="fas fa-evelope" text_arg="Outbox" %}</li>
 	{% include "navbar/drop_header.html" with first_arg=False text_arg="Session" %}
 	{% include "navbar/drop_item.html" with url_arg="auth_logout" icon_arg="fas fa-sign-out-alt" text_arg="Logout" %}</li>
 	    </ul>

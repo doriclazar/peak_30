@@ -8,11 +8,10 @@
   <div class="row">
     <div class="col-md-4">
       <div class="panel panel-default">
-	<div class="panel-heading">Groups</div>
+      <div class="panel-heading"><i class="fas fa-users"> &nbsp Groups</i></div>
 	<table class="table">
 	  <thead>
 	    <tr>
-	      <th scope="col"></th>
 	      <th scope="col"></th>
 	      <th scope="col">Name</th>
 	      <th scope="col">Rating</th>
@@ -23,7 +22,6 @@
 	    {% for group_profile in group_profiles|slice:":5" %}
 	    <tr>
 	      <td><span class="dot" style="height:25px; width:25px; border-radius:50%; background-color:#{{ group_profile.color }}; display:inline-block"></span></td>
-	      <td><i class="{{ group_profile.icon }}"></i></td>
 	      <td><a href="{% url 'get_group_profile' group_name=group_profile.group.name %}">{{ group_profile.group.name }}</a></td>
 	      <td>{{ group_profile.rating }}</td>
 	      <td>{{ group_profile.creation_date }}</td>
@@ -34,11 +32,10 @@
       </div>
 
       <div class="panel panel-default">
-	<div class="panel-heading">Users</div>
+	<div class="panel-heading"><i class="fas fa-user"> &nbsp Users</i></div>
 	<table class="table">
 	  <thead>
 	    <tr>
-	      <th scope="col"></th>
 	      <th scope="col"></th>
 	      <th scope="col">Full Name</th>
 	      <th scope="col">Rating</th>
@@ -49,7 +46,6 @@
 	    {% for user_profile in user_profiles|slice:":5" %}
 	    <tr>
 	      <td><span class="dot" style="height:25px; width:25px; border-radius:50%; background-color:#{{ user_profile.color }}; display:inline-block"></span></td>
-	      <td><i class="{{ user_profile.icon }}"></i></td>
 	      <td><a href="{% url 'get_user_profile' username=user_profile.user.username %}">{{ user_profile.user.get_full_name }}</a></td>
 	      <td>{{ user_profile.rating }}</td>
 	      <td>{{ user_profile.creation_date }}</td>
@@ -60,11 +56,10 @@
       </div>
 
       <div class="panel panel-default">
-	<div class="panel-heading">Bots</div>
+	<div class="panel-heading"><i class="fas fa-robot"> &nbsp Bots</i></div>
 	<table class="table">
 	  <thead>
 	    <tr>
-	      <th scope="col"></th>
 	      <th scope="col"></th>
 	      <th scope="col">Name</th>
 	      <th scope="col">Rating</th>
@@ -75,7 +70,6 @@
 	    {% for bot in bots|slice:":5" %}
 	    <tr>
 	      <td><span class="dot" style="height:25px; width:25px; border-radius:50%; background-color:#{{ bot.bot_profile.color }}; display:inline-block"></span></td>
-	      <td><i class="{{ bot.bot_profile.icon }}"></i></td>
 	      <td><a href="{% url 'get_bot_profile' bot_code=bot.code %}">{{ bot.name }}</a></td>
 	      <td>{{ bot.rating }}</td>
 	      <td>{{ bot.creation_date }}</td>
@@ -88,11 +82,10 @@
 
     <div class="col-md-4">
       <div class="panel panel-default">
-	<div class="panel-heading">Professions</div>
+	<div class="panel-heading"><i class="fas fa-briefcase"> &nbsp Professions</i></div>
 	<table class="table">
 	  <thead>
 	    <tr>
-	      <th scope="col"></th>
 	      <th scope="col"></th>
 	      <th scope="col">Name</th>
 	      <th scope="col">Created</th>
@@ -102,7 +95,6 @@
 	    {% for profession in professions|slice:":5" %}
 	    <tr>
 	      <td><span class="dot" style="height:25px; width:25px; border-radius:50%; background-color:#{{ profession.color }}; display:inline-block"></span></td>
-	      <td><i class="{{ profession.icon }}"></i></td>
 	      <td><a href="{% url 'get_profession' profession_code=profession.code %}">{{ profession.name }}</a></td>
 	      <td>{{ profession.creation_date }}</td>
 	    </tr>
@@ -112,11 +104,10 @@
       </div>
 
       <div class="panel panel-default">
-	<div class="panel-heading">Modules</div>
+        <div class="panel-heading"><i class="fas fa-puzzle-piece"> &nbsp Modules</i></div>
 	<table class="table">
 	  <thead>
 	    <tr>
-	      <th scope="col"></th>
 	      <th scope="col">Name</th>
 	      <th scope="col">Created</th>
 	    </tr>
@@ -124,7 +115,6 @@
 	  <tbody>
 	    {% for module in modules|slice:":5" %}
 	    <tr>
-	      <td><i class="{{ module.icon }}"></i></td>
 	      <td><a href="{% url 'get_module' module_code=module.code %}">{{ module.name }}</a></td>
 	      <td>{{ module.creation_date }}</td>
 	    </tr>
@@ -134,11 +124,10 @@
       </div>
 
       <div class="panel panel-default">
-	<div class="panel-heading">Categories</div>
+      <div class="panel-heading"><i class="fas fa-object-group"> &nbsp Categories</i></div>
 	<table class="table">
 	  <thead>
 	    <tr>
-	      <th scope="col"></th>
 	      <th scope="col">Name</th>
 	      <th scope="col">Created</th>
 	    </tr>
@@ -146,7 +135,6 @@
 	  <tbody>
 	    {% for category in categories|slice:":5" %}
 	    <tr>
-	      <td><i class="{{ category.icon }}"></i></td>
 	      <td><a href="{% url 'get_category' category_code=category.code %}">{{ category.name }}</a></td>
 	      <td>{{ category.creation_date }}</td>
 	    </tr>
@@ -156,7 +144,7 @@
       </div>
 
       <div class="panel panel-default">
-	<div class="panel-heading">Commands</div>
+	      <div class="panel-heading"><i class="fas fa-terminal">  &nbsp Commands</i></div>
 	<table class="table">
 	  <thead>
 	    <tr>
@@ -191,11 +179,10 @@
 	{% for timespan in event.list %}
 		<div style="border-left:5px solid #{{ timespan.get_actor_color }}; padding-left:5px;">
 		<h4>{{ timespan.name }}</h4>
-		<h5>Assigned by: {{ timespan.creator.get_full_name }}</h5>
+		<h5>Assigned by: <a href={% url 'get_user_profile' username=timespan.creator.username %}>{{ timespan.creator.get_full_name }}</a></h5>
 
 		</br>
 
-		<h4>{{ timespan.get_actor_name }}</h4>
 		{% if timespan.start_day %}
 		<h4><b>{{ timespan.get_start_day }}</b> through <b>{{ timespan.get_end_day }}</b></h4>
 		{% endif %}
@@ -205,6 +192,7 @@
 		{% if timespan.start_time %}
 		<h4><b>{{ timespan.start_time }}</b> through <b>{{ timespan.end_time }}</b></h4>
 		{% endif %}
+		<h5 >Assigned to: <i class="{{ timespan.get_actor_icon }}" style="color:#{{ timespan.get_actor_color }};"> {{ timespan.get_actor_name }}</i></h5>
 		</div>
 	{% endfor %}
         </div>

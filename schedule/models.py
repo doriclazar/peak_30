@@ -102,6 +102,17 @@ class TimeSpan(models.Model):
             actor_name=self.profession.name
         return actor_name
 
+    def get_actor_icon(self):
+        if self.user:
+            actor_icon='fas fa-user'
+        elif self.group:
+            actor_icon='fas fa-users'
+        elif self.bot:
+            actor_icon='fas fa-robot'
+        elif self.profession:
+            actor_icon='fas fa-briefcase'
+        return actor_icon
+
     def get_actor_color(self):
         if self.user:
             actor_color=self.user.user_profile.color

@@ -7,7 +7,6 @@ import datetime
 class GroupProfile(models.Model):
     group = models.OneToOneField(Group, on_delete = models.DO_NOTHING, related_name='group_profile')
     picture = models.URLField(default = '')
-    icon = models.CharField(max_length=64, default = 'fas fa-users')
     color = models.CharField(max_length=8, default='fafad2')
     about = models.CharField(max_length = 1024, default = None)
     rating = models.FloatField(default = 0)
@@ -21,7 +20,6 @@ class GroupProfile(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete = models.DO_NOTHING, related_name='user_profile')
     picture = models.URLField(default = '')
-    icon = models.CharField(max_length=64, default = 'fas fa-user')
     color = models.CharField(max_length=8, default='00bfff')
     about = models.CharField(max_length = 1024, default = None)
     rating = models.FloatField(default = 0)
@@ -39,7 +37,6 @@ class UserProfile(models.Model):
 class BotProfile(models.Model):
     bot = models.OneToOneField(Bot, on_delete = models.DO_NOTHING, related_name='bot_profile')
     picture = models.URLField(default = '')
-    icon = models.CharField(max_length=64, default='fas fa-robot')
     color = models.CharField(max_length=8, default='90EE90')
     about = models.CharField(max_length = 1024, default = None)
     rating = models.FloatField(default = 0)
