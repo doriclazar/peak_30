@@ -127,3 +127,5 @@ LOGIN_REDIRECT_URL = '/profiles/bots'
     
 STATIC_URL = '/static/'
 STATIC_ROOT = '/home/contact/peak_30/static/'
+
+APPEND_SLASH=False

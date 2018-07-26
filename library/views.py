@@ -1,3 +1,5 @@
+from django.core import serializers
+from django.http import JsonResponse
 from django.shortcuts import render
 from bots.models import Bot
 from .models import Profession, Module, Category, Command
@@ -74,3 +76,25 @@ def get_command(request, **kwargs):
     except Module.DoesNotExist:
         kwargs['error'] = 'There are no categories with code: {0}'.format(kwargs['category_code'],)
     return render(request, 'library/command.html', kwargs)
+
+def download_command(request, **kwargs):
+    try:
+        result = {}
+        bot = Bot.objects.get(name = request.POST.get('bot_name'), connection_code = request.POST.get('connection_code'))
+        if bot is not None:
+            kwargs['command']=Command.objects.get(code = kwargs['command_code'])
+            kwargs['command_data']=Command.objects.filter(code = kwargs['command_code']).values()[0]
+            try:
+                kwargs['categories'] = list(Category.objects.filter(command = kwargs['command']).values())
+            except Category.DoesNotExist:
+                kwargs['error'] =  'Category {0} does not have any commands.'.format(kwargs['Category_code'],)
+
+
+            result['command']=kwargs['command_data']
+            result['command']['categories']=kwargs['categories']
+
+
+
+    except Module.DoesNotExist:
+        kwargs['error'] = 'There are no categories with code: {0}'.format(kwargs['category_code'],)
+    return JsonResponse(result)

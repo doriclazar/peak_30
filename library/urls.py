@@ -18,5 +18,6 @@ urlpatterns = [
     url(r'^professions/(?P<profession_code>.+)/$', views.get_profession, name='get_profession'),
     url(r'^modules/(?P<module_code>.+)/$', views.get_module, name='get_module'),
     url(r'^categories/(?P<category_code>.+)/$', views.get_category, name='get_category'),
+    url(r'^commands/(?P<command_code>.+)/download/$', views.download_command, name='download_command'),
     url(r'^commands/(?P<command_code>.+)/$', views.get_command, name='get_command'),
 ]
