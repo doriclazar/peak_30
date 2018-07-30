@@ -42,6 +42,12 @@ class Category(models.Model):
     def __str__(self):
         return 'Category: {0}.  Creator: {1}.'.format(self.name, self.creator.get_full_name())
 
+class ExternalModule(models.Model):
+    name = models.CharField(max_length = 32)
+    active = models.BooleanField(default = True)
+    def __str__(self):
+        return 'External Module: {0}.'.format(self.name)
+
 class Command(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     module = models.ForeignKey(Module, on_delete=models.DO_NOTHING)
@@ -52,17 +58,11 @@ class Command(models.Model):
     description = models.CharField(max_length = 1024)
     definition = models.CharField(max_length=8192)
     script_url = models.CharField(max_length=128)
+    external_modules = models.ManyToManyField(ExternalModule)
     creation_date = models.DateField()
     active = models.BooleanField(default = True)
     def __str__(self):
         return 'Command: {0}.  Creator: {1}.'.format(self.name, self.creator.get_full_name())
-
-class ExternalModule(models.Model):
-    name = models.CharField(max_length = 32)
-    command = models.ManyToManyField(Command)
-    active = models.BooleanField(default = True)
-    def __str__(self):
-        return 'External Module: {0}.'.format(self.name)
 
 class Call(models.Model):
     name = models.CharField(max_length = 32)
@@ -72,14 +72,11 @@ class Call(models.Model):
     def __str__(self):
         return 'Command Call: {0}.'.format(self.name)
 
-class IgnoreResponse(models.Model):
-    initial_call = models.ForeignKey(Call, on_delete=models.CASCADE, related_name='initial_call')
-    response = models.ForeignKey(Call, on_delete=models.CASCADE, related_name='ignore_response')
-    active = models.BooleanField(default = True)
-
 class Word(models.Model):
     text = models.CharField(max_length = 128)
     active = models.BooleanField(default = True)
+    def __str__(self):
+        return 'Word Text: {0}.'.format(self.text)
 
 class Combo(models.Model):
     call = models.ForeignKey(Call, on_delete=models.CASCADE)
@@ -87,4 +84,5 @@ class Combo(models.Model):
     variable_length = models.IntegerField(default=0)
     optional = models.BooleanField(default = False)
     position = models.IntegerField()
-
+    def __str__(self):
+        return 'Call Name: {0}, Word Text: {1}.'.format(self.call.name, self.word.text)

@@ -1,8 +1,9 @@
 from django.core import serializers
 from django.http import JsonResponse
+from django.utils import timezone
 from django.shortcuts import render
 from bots.models import Bot
-from .models import Profession, Module, Category, Command
+from .models import Profession, Module, Category, ExternalModule, Command, Call, Word, Combo
 
 def index(request, **kwargs):
     return render(request, 'library/index.html', kwargs)
@@ -77,23 +78,72 @@ def get_command(request, **kwargs):
         kwargs['error'] = 'There are no categories with code: {0}'.format(kwargs['category_code'],)
     return render(request, 'library/command.html', kwargs)
 
+
+#__________________________________________________________________________________________________________________________
+#--------------------------------------------------------------------------------------------------------------------------
+#__________________________________________________________________________________________________________________________
+def update_profession(request, **kwargs):
+    try:
+        result = {}
+        bot = Bot.objects.get(name=request.POST.get('bot_name'), code=request.POST.get('bot_code'), connection_code=request.POST.get('conn_code'))
+        if bot is not None:
+            kwargs['profession']=Profession.objects.get(code = kwargs['profession_code'])
+            kwargs['modules']=Module.objects.filter(profession = kwargs['profession'])
+            result['commands_codes']=list(Command.objects.filter(module__in = kwargs['modules']).values('code'))
+    except Module.DoesNotExist:
+        kwargs['error'] = 'There are no categories with code: {0}'.format(kwargs['bot_name'],)
+    return JsonResponse(result)
+
 def download_command(request, **kwargs):
     try:
         result = {}
-        bot = Bot.objects.get(name = request.POST.get('bot_name'), connection_code = request.POST.get('connection_code'))
+        bot = Bot.objects.get(name=request.POST.get('bot_name'), code=request.POST.get('bot_code'), connection_code=request.POST.get('conn_code'))
         if bot is not None:
-            kwargs['command']=Command.objects.get(code = kwargs['command_code'])
-            kwargs['command_data']=Command.objects.filter(code = kwargs['command_code']).values()[0]
+            command_object=Command.objects.get(code = kwargs['command_code'])
+            command_data_object=Command.objects.filter(code = kwargs['command_code']).values()[0]
             try:
-                kwargs['categories'] = list(Category.objects.filter(command = kwargs['command']).values())
+                categories_list = list(Category.objects.filter(command=command_object).values('name', 'code', 'picture', 'description'))
             except Category.DoesNotExist:
                 kwargs['error'] =  'Category {0} does not have any commands.'.format(kwargs['Category_code'],)
+            try:
+                calls_list = list(Call.objects.filter(command=command_object).values())
+            except Call.DoesNotExist:
+                pass
 
 
-            result['command']=kwargs['command_data']
-            result['command']['categories']=kwargs['categories']
+            result['command']=command_data_object
+            result['command']['module_name']=command_object.module.name
+
+            result['command']['categories']=categories_list
+
+            
+            result['command']['note']='Imported from peak_30 {0}.'.format(timezone.now(),)
+
+            result['command'].pop('id', None)
+            result['command'].pop('module_id', None)
+            result['command'].pop('creator_id', None)
+
+            result['command']['external_modules'] = list()
+            
+            for external_module in command_object.external_modules.all():
+                result['command']['external_modules'].append(external_module.name)
 
 
+            result['command']['calls']=list()
+
+
+            for call_object in calls_list:
+                combos = Combo.objects.filter(call_id=call_object['id'])
+                call_object['words']=list()
+                for combo in combos:
+                    word = (Word.objects.filter(id=combo.word_id).values('text'))[0]
+                    word['position']=combo.position
+                    word['optional']=combo.optional
+                    word['varible_length']=combo.variable_length
+
+                    call_object['words'].append(word)
+
+                result['command']['calls'].append(call_object)
 
     except Module.DoesNotExist:
         kwargs['error'] = 'There are no categories with code: {0}'.format(kwargs['category_code'],)

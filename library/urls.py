@@ -15,6 +15,7 @@ urlpatterns = [
     #GET ALL COMMANDS - SORT BY NAME OR POPULARITY
     url(r'^commands/$', views.get_commands, name='get_commands'),
 
+    url(r'^professions/(?P<profession_code>.+)/update/$', views.update_profession, name='update_profession'),
     url(r'^professions/(?P<profession_code>.+)/$', views.get_profession, name='get_profession'),
     url(r'^modules/(?P<module_code>.+)/$', views.get_module, name='get_module'),
     url(r'^categories/(?P<category_code>.+)/$', views.get_category, name='get_category'),
