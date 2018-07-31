@@ -100,46 +100,45 @@ def download_command(request, **kwargs):
         bot = Bot.objects.get(name=request.POST.get('bot_name'), code=request.POST.get('bot_code'), connection_code=request.POST.get('conn_code'))
         if bot is not None:
             command_object=Command.objects.get(code = kwargs['command_code'])
-            command_data_object=Command.objects.filter(code = kwargs['command_code']).values()[0]
+            command_data_object=Command.objects.filter(code = kwargs['command_code']).values('name', 'code', 'programming_language', 'definition', 'script_url', 'description')[0]
             try:
                 categories_list = list(Category.objects.filter(command=command_object).values('name', 'code', 'picture', 'description'))
             except Category.DoesNotExist:
                 kwargs['error'] =  'Category {0} does not have any commands.'.format(kwargs['Category_code'],)
             try:
-                calls_list = list(Call.objects.filter(command=command_object).values())
+                calls_list = list(Call.objects.filter(command=command_object).values('id', 'language', 'response'))
             except Call.DoesNotExist:
                 pass
 
 
             result['command']=command_data_object
-            result['command']['module_name']=command_object.module.name
+            result['command']['module_code']=command_object.module.code
 
             result['command']['categories']=categories_list
 
-            
             result['command']['note']='Imported from peak_30 {0}.'.format(timezone.now(),)
-
-            result['command'].pop('id', None)
-            result['command'].pop('module_id', None)
-            result['command'].pop('creator_id', None)
 
             result['command']['external_modules'] = list()
             
             for external_module in command_object.external_modules.all():
-                result['command']['external_modules'].append(external_module.name)
-
+                external_module_data={'name':external_module.name}
+                result['command']['external_modules'].append(external_module_data)
 
             result['command']['calls']=list()
 
-
             for call_object in calls_list:
                 combos = Combo.objects.filter(call_id=call_object['id'])
+                call_object.pop('id', None)
                 call_object['words']=list()
                 for combo in combos:
                     word = (Word.objects.filter(id=combo.word_id).values('text'))[0]
                     word['position']=combo.position
-                    word['optional']=combo.optional
-                    word['varible_length']=combo.variable_length
+                    word['variable_length']=combo.variable_length
+                    
+                    if combo.optional:
+                        word['optional']='True'
+                    else:
+                        word['optional']='False'
 
                     call_object['words'].append(word)
 

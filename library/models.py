@@ -1,6 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class Language(models.Model):
+    name = models.CharField(max_length = 32)
+    code = models.CharField(max_length = 8, default='')
+    active = models.BooleanField(default = True)
+    def __str__(self):
+        return 'Language: {0}.  ISO code: {1}.'.format(self.name, self.code)
+
 class Profession(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     picture = models.URLField(default = '')
@@ -66,6 +73,7 @@ class Command(models.Model):
 
 class Call(models.Model):
     name = models.CharField(max_length = 32)
+    language = models.ForeignKey(Language, on_delete=models.DO_NOTHING)
     command = models.ForeignKey(Command)
     response = models.IntegerField()
     active = models.BooleanField(default = True)
