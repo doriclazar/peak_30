@@ -24,6 +24,11 @@ def get_commands(request, **kwargs):
     kwargs['commands'] = Command.objects.all()
     return render(request, 'library/commands.html', kwargs)
 
+def new_command(request, **kwargs):
+    return render(request, 'library/new_command.html', kwargs)
+
+def search_all(request, **kwargs):
+    return ('Search bar in development')
 
 def get_profession(request, **kwargs):
     try:

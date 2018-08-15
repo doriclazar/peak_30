@@ -38,7 +38,7 @@
 	  {% include "navbar/drop_item.html" with url_arg="get_categories" icon_arg="fas fa-plus" text_arg="Create new category"  %}
 	  {% include "navbar/drop_item.html" with url_arg="get_categories" icon_arg="fas fa-list" text_arg="List categories"  %}</li>
 	{% include "navbar/drop_header.html" with first_arg=False text_arg="Commands" %}
-	{% include "navbar/drop_item.html" with url_arg="get_commands" icon_arg="fas fa-plus" text_arg="Create new command"  %}
+	{% include "navbar/drop_item.html" with url_arg="new_command" icon_arg="fas fa-plus" text_arg="New command"  %}
 	{% include "navbar/drop_item.html" with url_arg="get_commands" icon_arg="fas fa-list" text_arg="List commands"  %}</li>
 	      </ul>
 	      </li>
@@ -58,12 +58,12 @@
       <div class="col-md-4">
       </div>
       <div class="col-md-4">
-	      <ul class="nav navbar-nav">
-	  <form class="navbar-form">
+	 <ul class="nav navbar-nav">
+         <form class="navbar-form" action="{% url 'search_all' %}" method="get" accept-charset="utf-8">
 	    <div class="input-group">
 	      <input type="text" class="form-control" placeholder="Search">
 	      <span class="input-group-btn">
-		<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+		<button type="submit" class="btn btn-default"><span class="fas fa-search"></span></button>
 	      </span>
 	    </div>
 	  </form>

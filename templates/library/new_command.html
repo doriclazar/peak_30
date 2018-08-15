@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>EXTENSION: library</h1>
+<form>
+  <label for="command_name">Command name: </label>
+  <input id="command_name" type="text" name="command_name" value="">
+  <!--
+  <input id="command_name" type="text" name="command_name" value="{ { current_name }}">
+  -->
+  <input type="submit" value="OK">
+</form>
+
+<h2>{{ error }}</h2>
+{% endblock %}
