@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.shortcuts import render
 from bots.models import Bot
-from .models import Profession, Module, Category, ExternalModule, Command, Call, Word, Combo
+from .models import Profession, Module, Category, ExternalModule, ProgrammingLanguage, Command, Call, Word, Combo
 
 def index(request, **kwargs):
     return render(request, 'library/index.html', kwargs)
@@ -25,6 +25,9 @@ def get_commands(request, **kwargs):
     return render(request, 'library/commands.html', kwargs)
 
 def new_command(request, **kwargs):
+    kwargs['modules'] = Module.objects.filter()
+    kwargs['categories'] = Category.objects.filter()
+    kwargs['external_modules'] = ExternalModule.objects.filter()
     return render(request, 'library/new_command.html', kwargs)
 
 def search_all(request, **kwargs):
@@ -105,7 +108,7 @@ def download_command(request, **kwargs):
         bot = Bot.objects.get(name=request.POST.get('bot_name'), code=request.POST.get('bot_code'), connection_code=request.POST.get('conn_code'))
         if bot is not None:
             command_object=Command.objects.get(code = kwargs['command_code'])
-            command_data_object=Command.objects.filter(code = kwargs['command_code']).values('name', 'code', 'programming_language', 'definition', 'script_url', 'description')[0]
+            command_data_object=Command.objects.filter(code = kwargs['command_code']).values('name', 'code', 'programming_language', 'definition', 'description')[0]
             try:
                 categories_list = list(Category.objects.filter(command=command_object).values('name', 'code', 'picture', 'description'))
             except Category.DoesNotExist:

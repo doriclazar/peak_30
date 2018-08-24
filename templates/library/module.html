@@ -6,6 +6,7 @@
 <p>Name: {{ module.name  }}</p>
 <p>Profession: <a href="{% url 'get_profession' profession_code=module.profession.code %}">{{ module.profession.name }}</a></p>
 <p>Description: {{ module.description }} </p>
+<a href="{{ module.script_url }}">Script</a>
 <p>Creation Date: {{ module.creation_date }}</p>
 <p>Creator:<a href="{% url 'get_user_profile' username=module.creator.username %}">{{ module.creator.get_full_name }}</a></p>
 

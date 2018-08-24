@@ -7,7 +7,7 @@ class Message(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING, related_name='message_user')
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.DO_NOTHING)
     bot = models.ForeignKey(Bot, null=True, blank=True, on_delete=models.DO_NOTHING)
-    code = models.CharField(max_length = 16, default='')
+    code = models.CharField(max_length = 16, default='{}-{}'.format('MSG', str(random.randint(0, 99999999)).zfill(8)), unique=True)
     title = models.CharField(max_length = 256)
     text = models.CharField(max_length = 4096)
     creation_time = models.DateTimeField()

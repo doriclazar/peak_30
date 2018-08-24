@@ -6,8 +6,8 @@ class Bot(models.Model):
     creator = models.ForeignKey(User, on_delete = models.DO_NOTHING)
     profession = models.ManyToManyField(Profession)
     name = models.CharField(max_length = 32)
-    code = models.CharField(max_length = 16, default='')
-    connection_code = models.CharField(max_length = 16, default='000000')
+    code = models.CharField(max_length = 8, default='{}-{}'.format('BOT', str(random.randint(0,9999)).zfill(4)), unique=True)
+    connection_code = models.CharField(max_length = 8, default='00000000')
     rating = models.FloatField(default = 0)
     public_key = models.CharField(max_length = 1024)
     public_key_expiry = models.DateField()
@@ -19,7 +19,7 @@ class Bot(models.Model):
 
 class Rule(models.Model):
     name = models.CharField(max_length = 32)
-    code = models.CharField(max_length = 16)
+    code = models.CharField(max_length = 8, default='{}-{}'.format('RUL', str(random.randint(0,9999)).zfill(4)), unique=True)
     active = models.BooleanField(default = True)
     def __str__(self):
         return 'Rule: {0}.  Code: {1}.'.format(self.name, self.code)

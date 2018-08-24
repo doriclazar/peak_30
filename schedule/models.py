@@ -6,7 +6,7 @@ from library.models import Profession, Command
 class Event(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     name = models.CharField(max_length = 32)
-    code = models.CharField(max_length = 16, default='')
+    code = models.CharField(max_length = 16, default='{}-{}'.format('EVT', str(random.randint(0,99999999)).zfill(8)), unique=True)
     description = models.CharField(max_length = 1024)
     creation_time = models.DateTimeField()
     read_time = models.DateTimeField(null=True, blank=True)

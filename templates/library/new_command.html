@@ -2,15 +2,83 @@
 {% load static %}
 
 {% block content %}
-<h1>EXTENSION: library</h1>
-<form>
-  <label for="command_name">Command name: </label>
-  <input id="command_name" type="text" name="command_name" value="">
-  <!--
-  <input id="command_name" type="text" name="command_name" value="{ { current_name }}">
-  -->
-  <input type="submit" value="OK">
-</form>
+<div class="container">
+  <div class="row">
+
+    <div class="col-md-12">
+      <form>
+        <div class="form-group row">
+
+          <div class="col-sm-4">
+            <label class="col-form-label" for="command_name">Command name</label>
+            <input id="command_name" class="form-control" type="text" name="command_name" value="">
+          </div>
+
+          <div class="col-sm-4">
+          <label class="col-form-label" for="modules">Module</label>
+          <select class="form-control" id="modules">
+		  <option></option>
+		  {% for module in modules %}	
+		  <option>{{ module.name }}</option>
+		  {% endfor %}
+          </select>
+        </div>
+
+          <div class="col-sm-4">
+            <label class="col-form-label" for="class_name">Class Name</label>
+            <input class="form-control" id="class_name" type="text" name="class_name" value="">
+          </div>
+
+        </div>
+
+        <div class="form-group row">
+          <div class="col-sm-6">
+          <label for="categories">Categories</label>
+          <select multiple class="form-control" id="categories">
+		  {% for category in categories %}	
+		  <option>{{ category.name }}</option>
+		  {% endfor %}
+          </select>
+        </div>
+          <div class="col-sm-6">
+          <label for="external_modules">External Modules</label>
+          <select multiple class="form-control" id="external_modules">
+		  {% for external_module in external_modules %}	
+		  <option>{{ external_module.name }}</option>
+		  {% endfor %}
+          </select>
+        </div>
+        </div>
+
+        <div class="form-check row">
+          <div class="col-sm-6">
+          <label for="description">Description</label>
+          <textarea class="form-control" id="description" rows="3"></textarea>
+        </div>
+
+          <div class="col-sm-6">
+          <label for="definition">Definition</label>
+          <textarea class="form-control" id="definition" rows="3"></textarea>
+        </div>
+        </div>
+
+        <div class="form-check row">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input">
+            Active
+          </label>
+        </div>
+
+        <div class="form-group row">
+          <input type="submit" class="btn btn-primary" value="Save">
+          <input type="submit" class="btn" value="Cancel">
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
 
 <h2>{{ error }}</h2>
 {% endblock %}

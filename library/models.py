@@ -1,3 +1,4 @@
+import random
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -7,13 +8,19 @@ class Language(models.Model):
     active = models.BooleanField(default = True)
     def __str__(self):
         return 'Language: {0}.  ISO code: {1}.'.format(self.name, self.code)
+    
+class ProgrammingLanguage(models.Model):
+    name = models.CharField(max_length = 32)
+    active = models.BooleanField(default = True)
+    def __str__(self):
+        return 'Programming Language: {0}.'.format(self.name)
 
 class Profession(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     picture = models.URLField(default = '')
     color = models.CharField(max_length=8, default='ffcf9e')
     name = models.CharField(max_length = 32)
-    code = models.CharField(max_length = 16, default='')
+    code = models.CharField(max_length = 8, default='{}-{}'.format('PRO', str(random.randint(0,9999)).zfill(4)), unique=True)
     description = models.CharField(max_length = 1024)
     creation_date = models.DateField()
     active = models.BooleanField(default = True)
@@ -27,13 +34,24 @@ class Profession(models.Model):
                 raise ValidationError('Profession code must not contain {0} character.'.format(forbiden_char,))
 
 class Module(models.Model):
+    programming_language = models.ForeignKey(ProgrammingLanguage, on_delete=models.CASCADE)
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     profession = models.ForeignKey(Profession, on_delete=models.DO_NOTHING)
     picture = models.URLField(default = '')
     name = models.CharField(max_length = 32)
-    code = models.CharField(max_length = 16, default='')
+    code = models.CharField(max_length = 8, default='{}-{}'.format('MOD', str(random.randint(0,9999)).zfill(4)), unique=True)
+    script_url = models.CharField(max_length=128)
     description = models.CharField(max_length = 1024)
     creation_date = models.DateField()
+    active = models.BooleanField(default = True)
+    def __str__(self):
+        return 'Module: {0}.  Creator: {1}.'.format(self.name, self.creator.get_full_name())
+
+class Class(models.Model):
+    module = models.ForeignKey(Module, on_delete=models.DO_NOTHING)
+    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    name = models.CharField(max_length = 32)
+    code = models.CharField(max_length = 8, default='{}-{}'.format('CLA', str(random.randint(0,9999)).zfill(4)), unique=True)
     active = models.BooleanField(default = True)
     def __str__(self):
         return 'Module: {0}.  Creator: {1}.'.format(self.name, self.creator.get_full_name())
@@ -42,12 +60,14 @@ class Category(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     picture = models.URLField(default = '')
     name = models.CharField(max_length = 32)
-    code = models.CharField(max_length = 16, default='')
+    code = models.CharField(max_length = 8, default='{}-{}'.format('CAT', str(random.randint(0,9999)).zfill(4)), unique=True)
     description = models.CharField(max_length = 1024)
     creation_date = models.DateField()
     active = models.BooleanField(default = True)
+
     def __str__(self):
         return 'Category: {0}.  Creator: {1}.'.format(self.name, self.creator.get_full_name())
+
 
 class ExternalModule(models.Model):
     name = models.CharField(max_length = 32)
@@ -60,11 +80,9 @@ class Command(models.Model):
     module = models.ForeignKey(Module, on_delete=models.DO_NOTHING)
     categories = models.ManyToManyField(Category)
     name = models.CharField(max_length = 32)
-    code = models.CharField(max_length = 16, default='')
-    programming_language = models.CharField(max_length=32)
+    code = models.CharField(max_length = 8, default='{}-{}'.format('CMD', str(random.randint(0,9999)).zfill(4)), unique=True)
     description = models.CharField(max_length = 1024)
     definition = models.CharField(max_length=8192)
-    script_url = models.CharField(max_length=128)
     external_modules = models.ManyToManyField(ExternalModule)
     creation_date = models.DateField()
     active = models.BooleanField(default = True)
