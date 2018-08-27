@@ -1,4 +1,4 @@
-import random
+import uuid
 from django.db import models
 from django.contrib.auth.models import User, Group
 from library.models import Profession
@@ -7,7 +7,7 @@ class Bot(models.Model):
     creator = models.ForeignKey(User, on_delete = models.DO_NOTHING)
     profession = models.ManyToManyField(Profession)
     name = models.CharField(max_length = 32)
-    code = models.CharField(max_length = 8, default='{}-{}'.format('BOT', str(random.randint(0,9999)).zfill(4)), unique=True)
+    code = models.UUIDField(default=uuid.uuid4, editable=False)
     connection_code = models.CharField(max_length = 8, default='00000000')
     rating = models.FloatField(default = 0)
     public_key = models.CharField(max_length = 1024)
@@ -20,7 +20,7 @@ class Bot(models.Model):
 
 class Rule(models.Model):
     name = models.CharField(max_length = 32)
-    code = models.CharField(max_length = 8, default='{}-{}'.format('RUL', str(random.randint(0,9999)).zfill(4)), unique=True)
+    code = models.UUIDField(default=uuid.uuid4, editable=False)
     active = models.BooleanField(default = True)
     def __str__(self):
         return 'Rule: {0}.  Code: {1}.'.format(self.name, self.code)

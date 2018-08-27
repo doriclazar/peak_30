@@ -1,4 +1,4 @@
-import random
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -20,18 +20,12 @@ class Profession(models.Model):
     picture = models.URLField(default = '')
     color = models.CharField(max_length=8, default='ffcf9e')
     name = models.CharField(max_length = 32)
-    code = models.CharField(max_length = 8, default='{}-{}'.format('PRO', str(random.randint(0,9999)).zfill(4)), unique=True)
+    code = models.UUIDField(default=uuid.uuid4, editable=False)
     description = models.CharField(max_length = 1024)
     creation_date = models.DateField()
     active = models.BooleanField(default = True)
     def __str__(self):
         return 'Profession: {0}.  Creator: {1}.'.format(self.name, self.creator.get_full_name())
-
-    def clean(self):
-        forbiden_chars = (' ', '!', '$', '^', '*')
-        for forbiden_char in forbiden_chars:
-            if forbiden_char in self.code:
-                raise ValidationError('Profession code must not contain {0} character.'.format(forbiden_char,))
 
 class Module(models.Model):
     programming_language = models.ForeignKey(ProgrammingLanguage, on_delete=models.CASCADE)
@@ -39,7 +33,7 @@ class Module(models.Model):
     profession = models.ForeignKey(Profession, on_delete=models.DO_NOTHING)
     picture = models.URLField(default = '')
     name = models.CharField(max_length = 32)
-    code = models.CharField(max_length = 8, default='{}-{}'.format('MOD', str(random.randint(0,9999)).zfill(4)), unique=True)
+    code = models.UUIDField(default=uuid.uuid4, editable=False)
     script_url = models.CharField(max_length=128)
     description = models.CharField(max_length = 1024)
     creation_date = models.DateField()
@@ -51,7 +45,7 @@ class Class(models.Model):
     module = models.ForeignKey(Module, on_delete=models.DO_NOTHING)
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     name = models.CharField(max_length = 32)
-    code = models.CharField(max_length = 8, default='{}-{}'.format('CLA', str(random.randint(0,9999)).zfill(4)), unique=True)
+    code = models.UUIDField(default=uuid.uuid4, editable=False)
     active = models.BooleanField(default = True)
     def __str__(self):
         return 'Module: {0}.  Creator: {1}.'.format(self.name, self.creator.get_full_name())
@@ -60,7 +54,7 @@ class Category(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     picture = models.URLField(default = '')
     name = models.CharField(max_length = 32)
-    code = models.CharField(max_length = 8, default='{}-{}'.format('CAT', str(random.randint(0,9999)).zfill(4)), unique=True)
+    code = models.UUIDField(default=uuid.uuid4, editable=False)
     description = models.CharField(max_length = 1024)
     creation_date = models.DateField()
     active = models.BooleanField(default = True)
@@ -80,7 +74,7 @@ class Command(models.Model):
     module = models.ForeignKey(Module, on_delete=models.DO_NOTHING)
     categories = models.ManyToManyField(Category)
     name = models.CharField(max_length = 32)
-    code = models.CharField(max_length = 8, default='{}-{}'.format('CMD', str(random.randint(0,9999)).zfill(4)), unique=True)
+    code = models.UUIDField(default=uuid.uuid4, editable=False)
     description = models.CharField(max_length = 1024)
     definition = models.CharField(max_length=8192)
     external_modules = models.ManyToManyField(ExternalModule)
@@ -90,13 +84,13 @@ class Command(models.Model):
         return 'Command: {0}.  Creator: {1}.'.format(self.name, self.creator.get_full_name())
 
 class Call(models.Model):
-    name = models.CharField(max_length = 32)
     language = models.ForeignKey(Language, on_delete=models.DO_NOTHING)
+    code = models.UUIDField(default=uuid.uuid4, editable=False)
     command = models.ForeignKey(Command)
     response = models.IntegerField()
     active = models.BooleanField(default = True)
     def __str__(self):
-        return 'Command Call: {0}.'.format(self.name)
+        return 'Call for command: {0}.'.format(self.command.name)
 
 class Word(models.Model):
     text = models.CharField(max_length = 128)

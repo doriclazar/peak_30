@@ -5,6 +5,25 @@ from django.shortcuts import render
 from bots.models import Bot
 from .models import Profession, Module, Category, ExternalModule, ProgrammingLanguage, Command, Call, Word, Combo
 
+
+
+def validate_command(request, **kwargs):
+    pass
+
+def search_all(request, **kwargs):
+    return ('Search bar in development')
+
+def new_command(request, **kwargs):
+    kwargs['modules'] = Module.objects.filter()
+    kwargs['categories'] = Category.objects.filter()
+    kwargs['external_modules'] = ExternalModule.objects.filter()
+    return render(request, 'library/new_command.html', kwargs)
+
+def get_classes(request, **kwargs):
+    classes_list = Class.objects.filter(Module = request.POST.get('module'), name__icontains=request.POST.get('name_part'))
+    return classes_list
+
+
 def index(request, **kwargs):
     return render(request, 'library/index.html', kwargs)
 
@@ -24,14 +43,6 @@ def get_commands(request, **kwargs):
     kwargs['commands'] = Command.objects.all()
     return render(request, 'library/commands.html', kwargs)
 
-def new_command(request, **kwargs):
-    kwargs['modules'] = Module.objects.filter()
-    kwargs['categories'] = Category.objects.filter()
-    kwargs['external_modules'] = ExternalModule.objects.filter()
-    return render(request, 'library/new_command.html', kwargs)
-
-def search_all(request, **kwargs):
-    return ('Search bar in development')
 
 def get_profession(request, **kwargs):
     try:
