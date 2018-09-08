@@ -4,11 +4,52 @@
 {% block content %}
 
 <link rel="stylesheet" href={% static "dashboard/css/panels.css" %}>
+<script>
+window.onload = function () {
+  CanvasJS.addColorSet("peak_colors",
+      [//colorSet Array
+      "#f8ab31",
+      "#222222",
+      "#6f3e99",
+      ]);
+
+  var task_completion_chart= new CanvasJS.Chart("task_completion", {
+    animationEnabled: true,
+    colorSet: "peak_colors",
+
+    title:{
+      text: "BOT TIME CONSUMPTION*remove",
+      horizontalAlign: "left"
+    },
+    data: [{
+      type: "doughnut",
+      startAngle: 180,
+      //innerRadius: 60,
+      indexLabelFontSize: 17,
+      indexLabel: "{label} - #percent%",
+      toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+      dataPoints: [
+      { y: 69, label: "Working" },
+      { y: 21, label: "Idling" },
+      { y: 10, label: "Maintenece" },
+      ]
+    }]
+  });
+  task_completion_chart.render();
+
+}
+</script>
+
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+
+
+
 <div class="container">
   <div class="row">
     <div class="col-md-4">
       <div class="panel panel-default">
-      <div class="panel-heading"><i class="fas fa-users"> &nbsp Groups</i></div>
+	<div class="panel-heading"><i class="fas fa-users"> &nbsp Groups</i></div>
 	<table class="table">
 	  <thead>
 	    <tr>
@@ -78,9 +119,6 @@
 	  </tbody>
 	</table>
       </div>
-    </div>
-
-    <div class="col-md-4">
       <div class="panel panel-default">
 	<div class="panel-heading"><i class="fas fa-briefcase"> &nbsp Professions</i></div>
 	<table class="table">
@@ -104,7 +142,7 @@
       </div>
 
       <div class="panel panel-default">
-        <div class="panel-heading"><i class="fas fa-puzzle-piece"> &nbsp Modules</i></div>
+	<div class="panel-heading"><i class="fas fa-puzzle-piece"> &nbsp Modules</i></div>
 	<table class="table">
 	  <thead>
 	    <tr>
@@ -124,7 +162,7 @@
       </div>
 
       <div class="panel panel-default">
-      <div class="panel-heading"><i class="fas fa-object-group"> &nbsp Categories</i></div>
+	<div class="panel-heading"><i class="fas fa-object-group"> &nbsp Categories</i></div>
 	<table class="table">
 	  <thead>
 	    <tr>
@@ -144,7 +182,7 @@
       </div>
 
       <div class="panel panel-default">
-	      <div class="panel-heading"><i class="fas fa-terminal">  &nbsp Commands</i></div>
+	<div class="panel-heading"><i class="fas fa-terminal">  &nbsp Commands</i></div>
 	<table class="table">
 	  <thead>
 	    <tr>
@@ -164,39 +202,53 @@
       </div>
 
     </div>
+
+
     <div class="col-md-4">
-	{% regroup timespans by event.name as event_list %} 
-	{% for event in event_list %}
-        <div class="jumbotron">
+      <div class="panel panel-default">
+	<div class="panel-heading"><i class="fas fa-tasks">  &nbsp Task Completion</i></div>
+	<div id="task_completion" style="height: 180px; width: 100%;"></div>
+	
+	<div class="panel-heading"><i class="fas fa-tasks">  &nbsp Time Consumption</i></div>
+	<div id="chartContainer" style="height: 180px; width: 100%;"></div>
+      </div>
+
+
+    </div>
+
+    <div class="col-md-4">
+      {% regroup timespans by event.name as event_list %} 
+      {% for event in event_list %}
+      <div class="jumbotron">
 	<h2>{{ event.grouper }}</h2>
 	{% for event_data in event.list|slice:"1" %}
-		<h5>Created: {{ event_data.event.creation_time }}
-			</br> by <a href={% url 'get_user_profile' username=event_data.event.creator.username %}>{{ event_data.event.creator.get_full_name }}</a></h5>
-		</br>
-		<h5>{{ event_data.event.description|truncatechars:100 }}</h5>
-	{% endfor %}
-	</br>
-	{% for timespan in event.list %}
-		<div style="border-left:5px solid #{{ timespan.get_actor_color }}; padding-left:5px;">
-		<h4>{{ timespan.name }}</h4>
-		<h5>Assigned by: <a href={% url 'get_user_profile' username=timespan.creator.username %}>{{ timespan.creator.get_full_name }}</a></h5>
+	<h5>Created: {{ event_data.event.creation_time }}
+	  </br> by <a href={% url 'get_user_profile' username=event_data.event.creator.username %}>{{ event_data.event.creator.get_full_name }}</a></h5>
+	  </br>
+	  <h5>{{ event_data.event.description|truncatechars:100 }}</h5>
+	  {% endfor %}
+	  </br>
+	  {% for timespan in event.list %}
+	  <div style="border-left:5px solid #{{ timespan.get_actor_color }}; padding-left:5px;">
+	    <h4>{{ timespan.name }}</h4>
+	    <h5>Assigned by: <a href={% url 'get_user_profile' username=timespan.creator.username %}>{{ timespan.creator.get_full_name }}</a></h5>
 
-		</br>
+	    </br>
 
-		{% if timespan.start_day %}
-		<h4><b>{{ timespan.get_start_day }}</b> through <b>{{ timespan.get_end_day }}</b></h4>
-		{% endif %}
-		{% if timespan.start_date %}
-		<h4><b>{{ timespan.start_date }}</b> through <b>{{ timespan.end_date }}</b></h4>
-		{% endif %}
-		{% if timespan.start_time %}
-		<h4><b>{{ timespan.start_time }}</b> through <b>{{ timespan.end_time }}</b></h4>
-		{% endif %}
-		<h5 >Assigned to: <i class="{{ timespan.get_actor_icon }}" style="color:#{{ timespan.get_actor_color }};"> {{ timespan.get_actor_name }}</i></h5>
-		</div>
-	{% endfor %}
-        </div>
-	{% endfor %}
+	    {% if timespan.start_day %}
+	    <h4><b>{{ timespan.get_start_day }}</b> through <b>{{ timespan.get_end_day }}</b></h4>
+	    {% endif %}
+	    {% if timespan.start_date %}
+	    <h4><b>{{ timespan.start_date }}</b> through <b>{{ timespan.end_date }}</b></h4>
+	    {% endif %}
+	    {% if timespan.start_time %}
+	    <h4><b>{{ timespan.start_time }}</b> through <b>{{ timespan.end_time }}</b></h4>
+	    {% endif %}
+	    <h5 >Assigned to: <i class="{{ timespan.get_actor_icon }}" style="color:#{{ timespan.get_actor_color }};"> {{ timespan.get_actor_name }}</i></h5>
+	  </div>
+	  {% endfor %}
+      </div>
+      {% endfor %}
     </div>
   </div>
 </div>

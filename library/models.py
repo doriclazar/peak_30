@@ -48,7 +48,7 @@ class Class(models.Model):
     code = models.UUIDField(default=uuid.uuid4, editable=False)
     active = models.BooleanField(default = True)
     def __str__(self):
-        return 'Module: {0}.  Creator: {1}.'.format(self.name, self.creator.get_full_name())
+        return 'Name: {0}.  Creator: {1}.'.format(self.name, self.creator.get_full_name())
 
 class Category(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)

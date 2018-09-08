@@ -1,9 +1,10 @@
+import json
 from django.core import serializers
 from django.http import JsonResponse
 from django.utils import timezone
 from django.shortcuts import render
 from bots.models import Bot
-from .models import Profession, Module, Category, ExternalModule, ProgrammingLanguage, Command, Call, Word, Combo
+from .models import Profession, Module, Class, Category, ExternalModule, ProgrammingLanguage, Command, Call, Word, Combo
 
 
 
@@ -20,9 +21,10 @@ def new_command(request, **kwargs):
     return render(request, 'library/new_command.html', kwargs)
 
 def get_classes(request, **kwargs):
-    classes_list = Class.objects.filter(Module = request.POST.get('module'), name__icontains=request.POST.get('name_part'))
-    return classes_list
-
+    result = { "name":"Temperature" }
+    #result['classes'] = Class.objects.filter(module = request.POST.get('module'), name__icontains = request.POST.get('name_part')).values('name')
+    #list(classes_names)
+    return JsonResponse(result)
 
 def index(request, **kwargs):
     return render(request, 'library/index.html', kwargs)
@@ -132,11 +134,8 @@ def download_command(request, **kwargs):
 
             result['command']=command_data_object
             result['command']['module_code']=command_object.module.code
-
             result['command']['categories']=categories_list
-
             result['command']['note']='Imported from peak_30 {0}.'.format(timezone.now(),)
-
             result['command']['external_modules'] = list()
             
             for external_module in command_object.external_modules.all():

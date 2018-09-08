@@ -34,20 +34,26 @@ $.ajaxSetup({
 
 $(document.body).on("input", "#class_name", function() {
 
-  //var username = $(this).val();
   var module = $("#modules").val();
   var class_name_part = $("#class_name").val();
 
   $.ajax({
     type:"POST",
-    url: 'ajax/get_classes/',
+    url: "{% url 'get_classes' %}",
     data: {
       "module":module,
       "name_part":class_name_part 
     },
     dataType: 'json',
     success: function (data) {
-      $("#class_name").val();
+	    for (var classe in data) {
+		    //var option = document.createElement("option");
+		    //option.text = classe;
+		    //$("#class_list").add(option);
+    		$("#class_name").val(classe);
+    		//$("#class_name").val();
+	    }
+
 
     },
     error: function (data) {
@@ -78,14 +84,22 @@ $(document.body).on("input", "#class_name", function() {
 	    <select class="form-control" id="modules">
 	      <option></option>
 	      {% for module in modules %}	
-	      <option>{{ module.name }}</option>
+	      <option value="{{ module.id }}">{{ module.name }}</option>
 	      {% endfor %}
 	    </select>
 	  </div>
 
 	  <div id="class_delegate" class="col-sm-4">
 	    <label class="col-form-label" for="class_name">Class Name (optional)</label>
-	    <input class="form-control" id="class_name" type="text" name="class_name" value="">
+	    <input class="form-control" id="class_name" type="text" name="class_name" list="browsers" value="">
+	    <datalist id="class_list">
+		<option value="Chrome">
+		<option value="Firefox">
+		<option value="Internet Explorer">
+		<option value="Opera">
+		<option value="Safari">
+		<option value="Microsoft Edge">
+	    </datalist>
 	  </div>
 
 	</div>
