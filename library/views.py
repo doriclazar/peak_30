@@ -21,9 +21,9 @@ def new_command(request, **kwargs):
     return render(request, 'library/new_command.html', kwargs)
 
 def get_classes(request, **kwargs):
-    result = { "name":"Temperature" }
-    #result['classes'] = Class.objects.filter(module = request.POST.get('module'), name__icontains = request.POST.get('name_part')).values('name')
-    #list(classes_names)
+    #result = { "name":"Temperature" }
+    result = {}
+    result['classes'] = list(Class.objects.filter(module = request.POST.get('module'), name__icontains = request.POST.get('name_part')).values('name'))
     return JsonResponse(result)
 
 def index(request, **kwargs):

@@ -2,9 +2,7 @@
 {% block content %}
 {% csrf_token %}
 
-
 <script>
-
 function getCookie(name) {
   var cookieValue = null;
   if (document.cookie && document.cookie != '') {
@@ -32,11 +30,15 @@ $.ajaxSetup({
 });
 
 
-$(document.body).on("input", "#class_name", function() {
 
-  var module = $("#modules").val();
-  var class_name_part = $("#class_name").val();
 
+
+
+
+
+
+function get_classes(module, class_name_part)
+{
   $.ajax({
     type:"POST",
     url: "{% url 'get_classes' %}",
@@ -46,23 +48,32 @@ $(document.body).on("input", "#class_name", function() {
     },
     dataType: 'json',
     success: function (data) {
-	    for (var classe in data) {
-		    //var option = document.createElement("option");
-		    //option.text = classe;
-		    //$("#class_list").add(option);
-    		$("#class_name").val(classe);
-    		//$("#class_name").val();
+	    $("#class_list").empty();
+	    for (var option_index = 0; option_index < data.classes.length; option_index++) {
+		    var option = document.createElement("option");
+		    option.text = data.classes[option_index].name;
+		    $("#class_list").append(option);
 	    }
-
-
     },
     error: function (data) {
       alert('error');
 
     }
   }); 
-});
 
+}
+
+window.onload =  function() {
+  var module = $("#modules").val()
+  var module = class_name_part = "";
+  $("#modules").change(function() 
+		  {
+  	  module = $("#modules").val()
+  	  class_name_part = $("#class_name").val();
+	  get_classes(module, class_name_part)
+  });
+//$(document.body).on("input", "#class_name", get_classes);
+};
 </script>
 
 
@@ -91,7 +102,7 @@ $(document.body).on("input", "#class_name", function() {
 
 	  <div id="class_delegate" class="col-sm-4">
 	    <label class="col-form-label" for="class_name">Class Name (optional)</label>
-	    <input class="form-control" id="class_name" type="text" name="class_name" list="browsers" value="">
+	    <input class="form-control" id="class_name" type="text" name="class_name" list="class_list" value="">
 	    <datalist id="class_list">
 		<option value="Chrome">
 		<option value="Firefox">

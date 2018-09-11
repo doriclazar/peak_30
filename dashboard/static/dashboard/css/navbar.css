@@ -6,16 +6,16 @@
 .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus,
 .navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus, .navbar-inverse .navbar-nav>.open>a:hover
 {
-    color: #ffffe5
+    color: #fadd9d;
 }
 
 .form-control:focus
 {
     border:1px solid #f8ab31;
-    box-shadow: inset 0 1px 1px #ffffe5, 0 0 8px #ffffe5;
+    box-shadow: inset 0 1px 1px #fadd9d 0 0 8px #fadd9d;
 }
 
 .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover
 {
-    background-color: #ffffe5;
+    background-color: #fadd9d;
 }

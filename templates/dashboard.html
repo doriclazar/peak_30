@@ -1,49 +1,79 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
 
 <link rel="stylesheet" href={% static "dashboard/css/panels.css" %}>
-<script>
-window.onload = function () {
-  CanvasJS.addColorSet("peak_colors",
-      [//colorSet Array
-      "#f8ab31",
-      "#222222",
-      "#6f3e99",
-      ]);
-
-  var task_completion_chart= new CanvasJS.Chart("task_completion", {
-    animationEnabled: true,
-    colorSet: "peak_colors",
-
-    title:{
-      text: "BOT TIME CONSUMPTION*remove",
-      horizontalAlign: "left"
-    },
-    data: [{
-      type: "doughnut",
-      startAngle: 180,
-      //innerRadius: 60,
-      indexLabelFontSize: 17,
-      indexLabel: "{label} - #percent%",
-      toolTipContent: "<b>{label}:</b> {y} (#percent%)",
-      dataPoints: [
-      { y: 69, label: "Working" },
-      { y: 21, label: "Idling" },
-      { y: 10, label: "Maintenece" },
-      ]
-    }]
-  });
-  task_completion_chart.render();
-
-}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js">
 </script>
 
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script>
+function generate_default_data()
+{
+  var default_chart_data = {
+    type: '',
+    data: {
+      labels: [],
+      datasets: [
+      ]
+    },
+    options: {
+      responsive: false,
+      cutoutPercentage:75 
+    }
+  }
+  return default_chart_data;
+}
+function generate_chart(raw_data, DOM_id)
+{
+	var new_data = generate_default_data();
+  	new_data['type'] = raw_data[0];
+	new_data['data']['labels'] = raw_data[1];
 
+	for (var dataset_count = 0; dataset_count<raw_data[2].length; dataset_count++)
+	{
+		new_data['data']['datasets'][dataset_count] = [];
+		this_dataset = new_data['data']['datasets'][dataset_count]
+		this_dataset['data'] = raw_data[2][dataset_count][0];
+		this_dataset['backgroundColor'] = raw_data[2][dataset_count][1];
+		this_dataset['hoverBackgroundColor'] = raw_data[2][dataset_count][2];
+		this_dataset['borderColor'] = raw_data[2][dataset_count][3];
+		this_dataset['label'] = raw_data[2][dataset_count][4];
+	}
+  	var new_DOM = document.getElementById(DOM_id).getContext('2d');
+  	var new_chart = new Chart(new_DOM, new_data);
+	return new_chart;
+}
 
+window.onload = function () {
+  var task_completion_raw = ['doughnut', ["Done", "Skipped", "Canceled"], 
+  [
+  [ 
+       [462, 11, 108], ["#f8ab31", "#6f3e99", "#222222"], ["#fadd9d", "#ac6ee0", "#444444"], "#ffffe5", ""
+  ]
+  ]];
+  var task_completion_data = generate_chart(task_completion_raw, "task_completion");
 
+  var time_consumption_raw = ['doughnut', ["Scheduled", "Free", "Off duty"], [
+  [
+  	[4040, 820, 180], ["#f8ab31", "#6f3e99", "#222222"], ["#fadd9d", "#ac6ee0", "#444444"], "#ffffe5","" 
+  ]
+  ]];
+  var time_consumption_chart = generate_chart(time_consumption_raw, "time_consumption");
+
+  var bot_effectiveness_raw = ['line', ['Jan', 'Feb', 'Mar'], [
+  [ 
+	  [0.75, -0.75, 1], "#f8ab31","#ffffe5", "#f8ab31", "SoulSugar" 
+  ],
+  [ 
+	  [-0.5, 0.75, 1],"#6f3e99","#6f3e99", "#6f3e99", "Air Eater" 
+  ],
+  [ 
+	  [0.5, 0.75, 1],  "#222222", "#444444", "#222222", "Bored One" 
+  ]
+  ]];
+  var bot_effectiveness_chart = generate_chart(bot_effectiveness_raw, "bot_effectiveness");
+}
+</script>
 
 <div class="container">
   <div class="row">
@@ -207,12 +237,18 @@ window.onload = function () {
     <div class="col-md-4">
       <div class="panel panel-default">
 	<div class="panel-heading"><i class="fas fa-tasks">  &nbsp Task Completion</i></div>
-	<div id="task_completion" style="height: 180px; width: 100%;"></div>
-	
-	<div class="panel-heading"><i class="fas fa-tasks">  &nbsp Time Consumption</i></div>
-	<div id="chartContainer" style="height: 180px; width: 100%;"></div>
+	<canvas id="task_completion" style="height: 180px; width: 100%;"></canvas>
+
+      </div>
+      <div class="panel panel-default">
+	<div class="panel-heading"><i class="fas fa-clock">  &nbsp Time Consumption</i></div>
+	<canvas id="time_consumption" style="height: 180px; width: 100%;"></canvas>
       </div>
 
+      <div class="panel panel-default">
+	<div class="panel-heading"><i class="fas fa-clipboard-check">  &nbsp Bot Effectiveness</i></div>
+	<canvas id="bot_effectiveness" style="height: 180px; width: 100%;"></canvas>
+      </div>
 
     </div>
 
