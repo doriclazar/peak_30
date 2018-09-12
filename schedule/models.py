@@ -12,8 +12,13 @@ class Event(models.Model):
     creation_time = models.DateTimeField()
     read_time = models.DateTimeField(null=True, blank=True)
     active = models.BooleanField(default=True)
+
     def __str__(self):
        return '{0} {1} {2}'.format(self.creator, self.name, self.creation_time)
+
+    class Meta:
+        verbose_name = "Event"
+        verbose_name_plural = "Events"
 
 class TimeSpan(models.Model):
     MONDAY = 1
@@ -47,6 +52,7 @@ class TimeSpan(models.Model):
     start_time = models.TimeField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
     is_skip = models.BooleanField(default=False)
+
     def clean(self):
         input_count = 0
         if self.user:
@@ -70,10 +76,6 @@ class TimeSpan(models.Model):
 
         if (not self.start_time and self.end_time) or (self.start_time and not self.end_time):
             raise ValidationError('Time must be defined with "from" - "until" varibales.')
-
-        # 
-        # if self.start_day and self.start_date:
-        #    raise ValidationError('"Date" and "Day" varibles are mutualy exclusive for timeline.')
 
         if not self.start_day and not self.start_date and not self.start_time:
             raise ValidationError('Timeline input does not contain any time values.')
@@ -127,12 +129,20 @@ class TimeSpan(models.Model):
 
     def __str__(self):
         return '{0} {1}'.format(self.name, self.get_actor_name())
+
+    class Meta:
+        verbose_name = "Time Span"
+        verbose_name_plural = "Time Spans"
         
 
 class EventCommand(models.Model):
     event = models.ForeignKey(Event, on_delete = models.CASCADE)
     command = models.ForeignKey(Command, on_delete = models.DO_NOTHING)
     description = models.CharField(max_length = 1024)
+
     def __str__(self):
        return '{0} {1}'.format(self.event.name, self.commmand.name)
 
+    class Meta:
+        verbose_name = "Event Command"
+        verbose_name_plural = "Event Commands"

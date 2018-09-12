@@ -13,6 +13,7 @@ class Message(models.Model):
     text = models.CharField(max_length = 4096)
     creation_time = models.DateTimeField()
     read_date = models.DateTimeField(null=True, blank=True)
+
     def clean(self):
         input_count = 0
         if self.user:
@@ -26,9 +27,17 @@ class Message(models.Model):
         elif input_count==0:
             raise ValidationError('Original receiver is not specified.')
 
+    class Meta:
+        verbose_name = "Message"
+        verbose_name_plural = "Messages"
+
 class CarbonCopy(models.Model):
     message = models.ForeignKey(Message, on_delete=models.DO_NOTHING)
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING)
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.DO_NOTHING)
     bot = models.ForeignKey(Bot, null=True, blank=True, on_delete=models.DO_NOTHING)
     read_date = models.DateTimeField()
+
+    class Meta:
+        verbose_name = "Carbon Copy"
+        verbose_name_plural = "Carbon Copies"

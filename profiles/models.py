@@ -10,12 +10,16 @@ class GroupProfile(models.Model):
     color = models.CharField(max_length=8, default='fafad2')
     about = models.CharField(max_length = 1024, default = None)
     rating = models.FloatField(default = 0)
-    #Keep private
     peak_points = models.FloatField(default = 0)
-    #
     creation_date = models.DateField()
+
     def __str__(self):
        return '{0}'.format(self.group.name)
+
+    class Meta:
+        verbose_name = "Group Profile"
+        verbose_name_plural = "Group Profiles"
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete = models.DO_NOTHING, related_name='user_profile')
@@ -24,15 +28,17 @@ class UserProfile(models.Model):
     about = models.CharField(max_length = 1024, default = None)
     rating = models.FloatField(default = 0)
     birth_date = models.DateField(default = None)
-    #Keep private
     address_line_1 = models.CharField(max_length = 128)
     address_line_2 = models.CharField(max_length = 128)
     phone_number = models.CharField(max_length = 16)
     peak_points = models.FloatField(default = 0)
-    #
     creation_date = models.DateField()
     def __str__(self):
-       return '{0} {1} {2}'.format(self.user.email, self.user.first_name, self.user.last_name)
+        return '{0} {1} {2}'.format(self.user.email, self.user.first_name, self.user.last_name)
+
+    class Meta:
+        verbose_name = "User Profile"
+        verbose_name_plural = "User Profiles"
 
 class BotProfile(models.Model):
     bot = models.OneToOneField(Bot, on_delete = models.DO_NOTHING, related_name='bot_profile')
@@ -41,5 +47,10 @@ class BotProfile(models.Model):
     about = models.CharField(max_length = 1024, default = None)
     rating = models.FloatField(default = 0)
     creation_date = models.DateField()
+
     def __str__(self):
        return '{0}'.format(self.bot.name)
+
+    class Meta:
+        verbose_name = "Bot Profile"
+        verbose_name_plural = "Bot Profiles"

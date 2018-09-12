@@ -22,6 +22,5 @@ urlpatterns = [
     url(r'^commands/(?P<command_code>.+)/download/$', views.download_command, name='download_command'),
     url(r'^commands/(?P<command_code>.+)/$', views.get_command, name='get_command'),
     
-    url(r'^ajax/get_classes/$', views.get_classes, name='get_classes'),
-
+    url(r'^commands/new_command/ajax/get_classes$', views.get_classes, name='get_classes'),
 ]

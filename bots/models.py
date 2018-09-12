@@ -17,13 +17,21 @@ class Bot(models.Model):
     active = models.BooleanField(default = True)
     def __str__(self):
         return 'Bot: {0}.  Creator: {1}.'.format(self.name, self.creator.get_full_name())
+    class Meta:
+        verbose_name = "Bot"
+        verbose_name_plural = "Bots"
 
 class Rule(models.Model):
     name = models.CharField(max_length = 32)
     code = models.UUIDField(default=uuid.uuid4, editable=False)
     active = models.BooleanField(default = True)
+
     def __str__(self):
         return 'Rule: {0}.  Code: {1}.'.format(self.name, self.code)
+
+    class Meta:
+        verbose_name = "Rule"
+        verbose_name_plural = "Rules"
 
 
 class Permit(models.Model):
@@ -35,6 +43,7 @@ class Permit(models.Model):
     issued_datetime = models.DateTimeField()
     expiry_datetime = models.DateTimeField(null=True)
     active = models.BooleanField(default = True)
+
     def clean(self):
         if not self.user and not self.group:
             raise ValidationError('Either "user" or "group" is required.')
@@ -48,3 +57,7 @@ class Permit(models.Model):
 
     def __str__(self):
         return 'user {0} or group {1} {2} {3}'.format(self.user.get_full_name(), self.group.name, self.rule.name, self.bot.name)
+
+    class Meta:
+        verbose_name = "Permit"
+        verbose_name_plural = "Permits"
