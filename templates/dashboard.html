@@ -3,6 +3,35 @@
 {% block content %}
 
 <link rel="stylesheet" href={% static "dashboard/css/panels.css" %}>
+
+<script>
+//VARIABLES FOR STATIC
+var task_completion_raw = ['doughnut', ["Done", "Skipped", "Canceled"], 
+    [
+      [ 
+	[462, 11, 108], ["#f8ab31", "#6f3e99", "#222222"], ["#fadd9d", "#ac6ee0", "#444444"], "#ffffe5", ""
+      ]
+    ]];
+    //var time_consumption_raw = [{{ user_settings.chart_type }}, ["Scheduled", "Free", "Off duty"], [
+var time_consumption_raw = ['doughnut', ["Scheduled", "Free", "Off duty"], [
+      [
+	      /*
+		 [{{ time_consumption_numdata }}, [{{ user_settings.theme.color1 }}, "#6f3e99", "#222222"], ["#fadd9d", "#ac6ee0", "#444444"], "#ffffe5","" 
+	      */
+
+	[4040, 820, 180], ["#f8ab31", "#6f3e99", "#222222"], ["#fadd9d", "#ac6ee0", "#444444"], "#ffffe5","" 
+      ]
+    ]];
+
+var bot_data = [];
+{% for bot in bots|slice:":5" %}
+// bot_data.push([{{ bot_numdata }}, "#{{ bot.bot_profile.color }}", "#f8ab31", "#{{ bot.bot_profile.color }}", "{{ bot.name }}"]);
+bot_data.push([[0.75, -0.75, 1], "#{{ bot.bot_profile.color }}", "#f8ab31", "#{{ bot.bot_profile.color }}", "{{ bot.name }}"]);
+{% endfor %}
+
+var bot_effectiveness_raw = ['line', ['Jan', 'Feb', 'Mar'], bot_data];
+</script>
+
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js">
 </script>
 <script type="text/javascript" src={% static "dashboard/js/charts.js" %}></script>

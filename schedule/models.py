@@ -45,12 +45,14 @@ class TimeSpan(models.Model):
     bot = models.ForeignKey(Bot, null=True, blank=True, on_delete=models.DO_NOTHING)
     profession = models.ForeignKey(Profession, null=True, blank=True, on_delete=models.DO_NOTHING)
     description = models.CharField(max_length = 1024, null=True, blank=True)
+
     start_day = models.IntegerField(choices = DAYS_OF_WEEK, null=True, blank=True)
     end_day = models.IntegerField(choices = DAYS_OF_WEEK, null=True, blank=True)
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     start_time = models.TimeField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
+
     is_skip = models.BooleanField(default=False)
 
     def clean(self):
