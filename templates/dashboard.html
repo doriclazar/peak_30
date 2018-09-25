@@ -25,8 +25,7 @@ var time_consumption_raw = ['doughnut', ["Scheduled", "Free", "Off duty"], [
 
 var bot_data = [];
 {% for bot in bots|slice:":5" %}
-// bot_data.push([{{ bot_numdata }}, "#{{ bot.bot_profile.color }}", "#f8ab31", "#{{ bot.bot_profile.color }}", "{{ bot.name }}"]);
-bot_data.push([[0.75, -0.75, 1], "#{{ bot.bot_profile.color }}", "#f8ab31", "#{{ bot.bot_profile.color }}", "{{ bot.name }}"]);
+bot_data.push([{{ bot.numdata }}, "#{{ bot.bot_profile.color }}", "#f8ab31", "#{{ bot.bot_profile.color }}", "{{ bot.name }}"]);
 {% endfor %}
 
 var bot_effectiveness_raw = ['line', ['Jan', 'Feb', 'Mar'], bot_data];
