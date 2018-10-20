@@ -4,6 +4,19 @@ from django.contrib.auth.models import User, Group
 from bots.models import Bot
 from library.models import Profession, Command
 
+class ActionType(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    name = models.CharField(max_length = 32)
+    description = models.CharField(max_length = 1024)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+       return '{0}'.format(self.name)
+
+    class Meta:
+        verbose_name = "Action Type"
+        verbose_name_plural = "Action Types"
+
 class Event(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     name = models.CharField(max_length = 32)
@@ -11,6 +24,8 @@ class Event(models.Model):
     description = models.CharField(max_length = 1024)
     creation_time = models.DateTimeField()
     read_time = models.DateTimeField(null=True, blank=True)
+    start_time = models.DateTimeField(null=True, blank=True)
+    end_time = models.DateTimeField(null=True, blank=True)
     active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -20,40 +35,20 @@ class Event(models.Model):
         verbose_name = "Event"
         verbose_name_plural = "Events"
 
-class TimeSpan(models.Model):
-    MONDAY = 1
-    TUESDAY = 2
-    WEDNESDAY = 3
-    THURSDAY = 4
-    FRIDAY = 5
-    SATURDAY = 6
-    SUNDAY = 7
-    DAYS_OF_WEEK = (
-        (MONDAY, 'Monday'),
-        (TUESDAY, 'Tuesday'),
-        (WEDNESDAY, 'Wednesday'),
-        (THURSDAY, 'Thursday'),
-        (FRIDAY, 'Friday'),
-        (SATURDAY, 'Saturday'),
-        (SUNDAY, 'Sunday'),
-        )
+class Action(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='timespan_creator')
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    action_type = models.ForeignKey(ActionType, on_delete=models.CASCADE)
     name = models.CharField(max_length = 32)
+    command = models.ForeignKey(Command, on_delete = models.DO_NOTHING)
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING)
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.DO_NOTHING)
     bot = models.ForeignKey(Bot, null=True, blank=True, on_delete=models.DO_NOTHING)
     profession = models.ForeignKey(Profession, null=True, blank=True, on_delete=models.DO_NOTHING)
     description = models.CharField(max_length = 1024, null=True, blank=True)
 
-    start_day = models.IntegerField(choices = DAYS_OF_WEEK, null=True, blank=True)
-    end_day = models.IntegerField(choices = DAYS_OF_WEEK, null=True, blank=True)
-    start_date = models.DateField(null=True, blank=True)
-    end_date = models.DateField(null=True, blank=True)
-    start_time = models.TimeField(null=True, blank=True)
-    end_time = models.TimeField(null=True, blank=True)
-
-    is_skip = models.BooleanField(default=False)
+    start_time = models.DateTimeField(null=True, blank=True)
+    end_time = models.DateTimeField(null=True, blank=True)
 
     def clean(self):
         input_count = 0
@@ -69,32 +64,6 @@ class TimeSpan(models.Model):
             raise ValidationError('Original receiver can either be a bot, a user, or a group.')
         elif input_count==0:
             raise ValidationError('Original receiver is not specified.')
-
-        if not self.start_day and self.end_day:
-            raise ValidationError('Need a start day.')
-
-        if not self.start_date and self.end_date:
-            raise ValidationError('Need a start date.')
-
-        if (not self.start_time and self.end_time) or (self.start_time and not self.end_time):
-            raise ValidationError('Time must be defined with "from" - "until" varibales.')
-
-        if not self.start_day and not self.start_date and not self.start_time:
-            raise ValidationError('Timeline input does not contain any time values.')
-
-    def get_start_day(self):
-        if self.start_day is not None:
-            result = self.DAYS_OF_WEEK[self.start_day-1][1]
-        else:
-            result = self.DAYS_OF_WEEK[0][1]
-        return result
-
-    def get_end_day(self):
-        if self.end_day is not None:
-            result = self.DAYS_OF_WEEK[self.end_day-1][1]
-        else:
-            result = self.DAYS_OF_WEEK[6][1]
-        return result
 
     def get_actor_name(self):
         if self.user:
@@ -130,21 +99,8 @@ class TimeSpan(models.Model):
         return actor_color
 
     def __str__(self):
-        return '{0} {1}'.format(self.name, self.get_actor_name())
+        return '{0} {1} {2}'.format(self.name, self.command.name, self.get_actor_name())
 
     class Meta:
-        verbose_name = "Time Span"
-        verbose_name_plural = "Time Spans"
-        
-
-class EventCommand(models.Model):
-    event = models.ForeignKey(Event, on_delete = models.CASCADE)
-    command = models.ForeignKey(Command, on_delete = models.DO_NOTHING)
-    description = models.CharField(max_length = 1024)
-
-    def __str__(self):
-       return '{0} {1}'.format(self.event.name, self.commmand.name)
-
-    class Meta:
-        verbose_name = "Event Command"
-        verbose_name_plural = "Event Commands"
+        verbose_name = "Action"
+        verbose_name_plural = "Actions"
