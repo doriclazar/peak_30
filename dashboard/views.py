@@ -1,41 +1,46 @@
 from django.shortcuts import render
-#from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group
 from profiles.models import UserProfile, GroupProfile
 from bots.models import Bot
 from library.models import Profession, Module, Category, Command
-from schedule.models import TimeSpan
+from schedule.models import Event, Action
 from .models import UserSettings
 
 def get_dashboard(request, **kwargs):
+    user_settings=(None,)
+    if request.user.is_authenticated:
+        user_settings = UserSettings.objects.filter(user = request.user)
 
-    users_settigs = UserSettings.objects.filter(user = auth.user)
-
+    # Modify to return the values by auth.user, not .all():
     kwargs['group_profiles'] = GroupProfile.objects.all()
     kwargs['user_profiles'] = UserProfile.objects.all()
     kwargs['professions'] = Profession.objects.all()
     kwargs['modules'] = Module.objects.all()
     kwargs['categories'] = Category.objects.all()
     kwargs['commands'] = Command.objects.all()
-    kwargs['timespans'] = TimeSpan.objects.all()
+    kwargs['actions'] = Action.objects.all()
     kwargs['bots'] = Bot.objects.all()
 
-    worked_timespans = []
+    done_actions = []
     for bot in kwargs['bots']:
-        for index in range(int(user_settigs[0]['chart_period'])):
+        # Modify to extract by key name, not index:
+        for index in range(int(user_settings[0]['chart_period'])):
             pass
-        #worked_timespans.append(TimeSpan.objects.filter(bot = bot, end_date before 2m ago & after 3m ago, is_skip=False).values('id'))
+
+        #done_actions.append(Action.objects.filter(bot = bot, end_date before 2m ago & after 3m ago, is_skip=False).values('id'))
         #worked_timespans.append(TimeSpan.objects.filter(bot = bot, end_date before 2m ago & after 3m ago, is_skip=False).values('id'))
         #worked_timespans.append(TimeSpan.objects.filter(bot = bot, end_date before 1m ago & after 2m ago, is_skip=False).values('id'))
         #worked_timespans.append(TimeSpan.objects.filter(bot = bot, end_date before today & after 1m ago, is_skip=False).values('id'))
-        #for timespan in worked_timespans:
-        #    bot.numdata.append(len(timespan))
+        for done_action in done_actions:
+            bot.numdata.append(len(done_action))
         
-        #time_worked = timesince(worked_timespans.date_start) - timesince(worked_timespans.date_end) - 24*(7 - (worked_timespans.end_day - worked_timespans.start_day)) - (timesince(worked_timespans.start_time) - timesince(worked_timespans.end_time))
+        time_worked = timesince(done_actions.date_start) - timesince(done_actions.date_end) - 24*(7 - (done_actions.end_day - done_actions.start_day)) - (timesince(done_actions.start_time) - timesince(done_actions.end_time))
 
     #for bot_index in range(len(kwargs['bots'])):
-        #worked_timespans =  TimeSpan.objects.filter(bot = kwargs['bots'][bot_index], is_skip=False).values('start_day', 'end_day', 'start_date', 'end_date', 'start_time', 'end_time')
+        #done_events =  Event.objects.filter(bot = kwargs['bots'][bot_index], is_skip=False).values('start_day', 'end_day', 'start_date', 'end_date', 'start_time', 'end_time')
         #kwargs['bots'][bot_index]
     
+    # Rebuild the view to project Event/Action models (timespans are no longer active).
     '''
     worked_timespans =  Schedule.objects.filter(is_skip=False).values('start_day, end_day, start_date, end_date')
     time_worked = timesince(worked_timespans.date_start) - timesince(worked_timespans.date_end) + 
