@@ -36,7 +36,7 @@ class Event(models.Model):
         verbose_name_plural = "Events"
 
 class Action(models.Model):
-    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='timespan_creator')
+    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='event_creator')
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     action_type = models.ForeignKey(ActionType, on_delete=models.CASCADE)
     name = models.CharField(max_length = 32)
@@ -46,6 +46,7 @@ class Action(models.Model):
     bot = models.ForeignKey(Bot, null=True, blank=True, on_delete=models.DO_NOTHING)
     profession = models.ForeignKey(Profession, null=True, blank=True, on_delete=models.DO_NOTHING)
     description = models.CharField(max_length = 1024, null=True, blank=True)
+    completion = models.IntegerField(null=False, default=0)
 
     start_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)

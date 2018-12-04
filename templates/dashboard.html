@@ -77,7 +77,9 @@ var bot_effectiveness_raw = ['line', ['Jan', 'Feb', 'Mar'], bot_data];
 	    {% for user_profile in user_profiles|slice:":5" %}
 	    <tr>
 	      <td><span class="dot" style="height:25px; width:25px; border-radius:50%; background-color:#{{ user_profile.color }}; display:inline-block"></span></td>
+	    	{% comment %}
 	      <td><a href="{% url 'get_user_profile' username=user_profile.user.username %}">{{ user_profile.user.get_full_name }}</a></td>
+	    	{% endcomment %}
 	      <td>{{ user_profile.rating }}</td>
 	      <td>{{ user_profile.creation_date }}</td>
 	    </tr>
@@ -213,34 +215,41 @@ var bot_effectiveness_raw = ['line', ['Jan', 'Feb', 'Mar'], bot_data];
     </div>
 
     <div class="col-md-4">
-      {% regroup timespans by event.name as event_list %} 
+      {% regroup events by event.name as event_list %} 
       {% for event in event_list %}
       <div class="jumbotron">
 	<h2>{{ event.grouper }}</h2>
 	{% for event_data in event.list|slice:"1" %}
 	<h5>Created: {{ event_data.event.creation_time }}
-	  </br> by <a href={% url 'get_user_profile' username=event_data.event.creator.username %}>{{ event_data.event.creator.get_full_name }}</a></h5>
+	  </br> by 
+	    	{% comment %}
+	    <a href={% url 'get_user_profile' username=event_data.event.creator.username %}>
+		  {{ event_data.event.creator.get_full_name }}
+	    </a>
+	    	{% endcomment %}
+	
+	</h5>
 	  </br>
 	  <h5>{{ event_data.event.description|truncatechars:100 }}</h5>
 	  {% endfor %}
 	  </br>
-	  {% for timespan in event.list %}
-	  <div style="border-left:5px solid #{{ timespan.get_actor_color }}; padding-left:5px;">
-	    <h4>{{ timespan.name }}</h4>
-	    <h5>Assigned by: <a href={% url 'get_user_profile' username=timespan.creator.username %}>{{ timespan.creator.get_full_name }}</a></h5>
+	  {% for event in event.list %}
+	  <div style="border-left:5px solid #{{ event.get_actor_color }}; padding-left:5px;">
+	    <h4>{{ event.name }}</h4>
+	    <h5>Assigned by: <a href={% url 'get_user_profile' username=event.creator.username %}>{{ event.creator.get_full_name }}</a></h5>
 
 	    </br>
 
-	    {% if timespan.start_day %}
-	    <h4><b>{{ timespan.get_start_day }}</b> through <b>{{ timespan.get_end_day }}</b></h4>
+	    {% if event.start_day %}
+	    <h4><b>{{ event.get_start_day }}</b> through <b>{{ event.get_end_day }}</b></h4>
 	    {% endif %}
-	    {% if timespan.start_date %}
-	    <h4><b>{{ timespan.start_date }}</b> through <b>{{ timespan.end_date }}</b></h4>
+	    {% if event.start_date %}
+	    <h4><b>{{ event.start_date }}</b> through <b>{{ event.end_date }}</b></h4>
 	    {% endif %}
-	    {% if timespan.start_time %}
-	    <h4><b>{{ timespan.start_time }}</b> through <b>{{ timespan.end_time }}</b></h4>
+	    {% if event.start_time %}
+	    <h4><b>{{ event.start_time }}</b> through <b>{{ event.end_time }}</b></h4>
 	    {% endif %}
-	    <h5 >Assigned to: <i class="{{ timespan.get_actor_icon }}" style="color:#{{ timespan.get_actor_color }};"> {{ timespan.get_actor_name }}</i></h5>
+	    <h5 >Assigned to: <i class="{{ event.get_actor_icon }}" style="color:#{{ event.get_actor_color }};"> {{ event.get_actor_name }}</i></h5>
 	  </div>
 	  {% endfor %}
       </div>

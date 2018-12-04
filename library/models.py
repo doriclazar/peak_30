@@ -124,7 +124,9 @@ class Command(models.Model):
 class Call(models.Model):
     language = models.ForeignKey(Language, on_delete=models.DO_NOTHING)
     code = models.UUIDField(default=uuid.uuid4, editable=False)
-    command = models.ForeignKey(Command)
+
+    command = models.ForeignKey(Command, on_delete=models.DO_NOTHING)
+
     response = models.IntegerField()
     active = models.BooleanField(default = True)
 
