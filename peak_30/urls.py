@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^profiles/', include('profiles.urls')),
     url(r'^library/', include('library.urls')),
     url(r'^messages/', include('messages.urls')),
-    url(r'^accounts/', include('registration.backends.hmac.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^accounts/', include('registration.auth_urls')),
     url(r'^', include('dashboard.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
